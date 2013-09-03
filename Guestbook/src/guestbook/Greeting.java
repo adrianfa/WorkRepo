@@ -12,6 +12,7 @@ public class Greeting implements Comparable<Greeting> {
 	String content;
 	Date date;
 
+	@SuppressWarnings("unused")
 	private Greeting() {}
 
 	public Greeting(User user, String content) {
