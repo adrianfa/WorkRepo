@@ -16,6 +16,7 @@ package com.google.cloud.demo.model.sql;
 
 import com.google.appengine.api.rdbms.AppEngineDriver;
 import com.google.cloud.demo.ConfigManager;
+import com.google.cloud.demo.model.AlbumManager;
 import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoEntityManagerFactory;
 import com.google.cloud.demo.model.DemoModelException;
@@ -38,6 +39,7 @@ public class DemoEntityManagerSqlFactory implements DemoEntityManagerFactory {
   private DemoUserManager demoUserManager;
   private PhotoManager photoManager;
   private CommentManager commentManager;
+  private AlbumManager albumManager;
 
   @Override
   public void init(ConfigManager configManager) {
@@ -60,6 +62,11 @@ public class DemoEntityManagerSqlFactory implements DemoEntityManagerFactory {
   @Override
   public CommentManager getCommentManager() {
     return commentManager;
+  }
+
+  @Override
+  public AlbumManager getAlbumManager() {
+    return albumManager;
   }
 
   @Override

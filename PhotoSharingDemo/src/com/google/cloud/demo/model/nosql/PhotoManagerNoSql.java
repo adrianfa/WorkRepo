@@ -85,6 +85,20 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
     FetchOptions options = FetchOptions.Builder.withDefaults();
     return queryEntities(query, options);
   }
+  
+  @Override
+  public Iterable<Photo> getOwnedAlbumPhotos(String userId, String albumId) {
+    Query query = new Query(getKind());
+    query.setAncestor(userManager.createDemoUserKey(userId));
+    Query.Filter filterActive = new Query.FilterPredicate(PhotoNoSql.FIELD_NAME_ACTIVE,
+            FilterOperator.EQUAL, true);
+    Query.Filter filterAlbumId = new Query.FilterPredicate(PhotoNoSql.FIELD_NAME_ALBUM_ID,
+            FilterOperator.EQUAL, albumId);
+    Query.Filter filterComposite = Query.CompositeFilterOperator.and(filterActive, filterAlbumId);
+    query.setFilter(filterComposite);
+    FetchOptions options = FetchOptions.Builder.withDefaults();
+    return queryEntities(query, options);
+  }
 
   @Override
   public Iterable<Photo> getSharedPhotos(String userId) {

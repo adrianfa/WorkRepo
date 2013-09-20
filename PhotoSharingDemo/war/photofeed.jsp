@@ -15,6 +15,7 @@
   PhotoServiceManager serviceManager = appContext.getPhotoServiceManager();
   PhotoManager photoManager = appContext.getPhotoManager();
   CommentManager commentManager = appContext.getCommentManager();
+  AlbumManager albumManager = appContext.getAlbumManager();
 %>
 <!DOCTYPE html>
 
@@ -25,66 +26,82 @@ var contentDivs = new Array();
 
 function init() {
 
-  // Grab the tab links and content divs from the page
-  var tabListItems = document.getElementById('tablist').childNodes;
-  for ( var i = 0; i < tabListItems.length; i++ ) {
-    if ( tabListItems[i].nodeName == "LI" ) {
-      var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
-      var id = getHash( tabLink.getAttribute('href') );
-      tabLinks[id] = tabLink;
-      contentDivs[id] = document.getElementById( id );
+    // Grab the tab links and content divs from the page
+    var tabListItems = document.getElementById('tabs').childNodes;
+    for ( var i = 0; i < tabListItems.length; i++ ) {
+      if ( tabListItems[i].nodeName == "LI" ) {
+        var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+        var id = getHash( tabLink.getAttribute('href') );
+        tabLinks[id] = tabLink;
+        contentDivs[id] = document.getElementById( id );
+      }
+    }
+
+    // Assign onclick events to the tab links, and
+    // highlight the first tab
+	var tabId = getUrlVars()["tabId"];
+	if (!tabId || tabId.length === 0)
+		tabId = "managestream";
+	
+    for ( var id in tabLinks ) {
+      tabLinks[id].onclick = showTab;
+      tabLinks[id].onfocus = function() { this.blur() };
+      if ( id == tabId ) tabLinks[id].className = 'selected';
+    }
+
+    // Hide all content divs except the first
+     for ( var id in contentDivs ) {
+      if ( id != tabId ) contentDivs[id].className = 'tabContent hide';
     }
   }
 
-  // Assign onclick events to the tab links, and
-  // highlight the first tab
-  var i = 0;
-
-  for ( var id in tabLinks ) {
-    tabLinks[id].onclick = showTab;
-    tabLinks[id].onfocus = function() { this.blur() };
-    if ( i == 0 ) tabLinks[id].className = 'current';
-    i++;
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
   }
 
-  // Hide all content divs except the first
-  var i = 0;
-
-  for ( var id in contentDivs ) {
-    if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
-    i++;
+  function pageShow() {
+		alert("We got a pageShow call!...");  
   }
-}
+  
+  function showTab() {
+    var selectedId = getHash( this.getAttribute('href') );
 
-function showTab() {
-  var selectedId = getHash( this.getAttribute('href') );
+    // Highlight the selected tab, and dim all others.
+    // Also show the selected content div, and hide all others.
+    for ( var id in contentDivs ) {
+      if ( id == selectedId ) {
+        tabLinks[id].className = 'selected';
+        contentDivs[id].className = 'tabContent';
+      } else {
+        tabLinks[id].className = '';
+        contentDivs[id].className = 'tabContent hide';
+      }
+    }
+    
+    var url1 = window.location.href;    
+    var url2 = url1.split("#", 2);
+    var url3 = url2[0].split("?", 2);
+    var newUrl = url3[0].concat(this.getAttribute('href')); // + window.location.hash;
+	window.location.replace(newUrl);
+    // Stop the browser following the link
+    return false;
+  }
 
-  // Highlight the selected tab, and dim all others.
-  // Also show the selected content div, and hide all others.
-  for ( var id in contentDivs ) {
-    if ( id == selectedId ) {
-      tabLinks[id].className = 'current';
-      contentDivs[id].className = 'tabContent';
-    } else {
-      tabLinks[id].className = '';
-      contentDivs[id].className = 'tabContent hide';
+  function getFirstChildWithTagName( element, tagName ) {
+    for ( var i = 0; i < element.childNodes.length; i++ ) {
+      if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
     }
   }
 
-  // Stop the browser following the link
-  return false;
-}
-
-function getFirstChildWithTagName( element, tagName ) {
-  for ( var i = 0; i < element.childNodes.length; i++ ) {
-    if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+  function getHash( url ) {
+    var hashPos = url.lastIndexOf ( '#' );
+    return url.substring( hashPos + 1 );
   }
-}
 
-function getHash( url ) {
-  var hashPos = url.lastIndexOf ( '#' );
-  return url.substring( hashPos + 1 );
-}
 
 function onFileSelected() {
   filename = document.getElementById("input-file").value;
@@ -146,34 +163,98 @@ function toggleCommentPost(id, expanded) {
       </h1>
     </div>
       
-		<ul class="tablist">
-      		<li><a href="#managestream">Manage</a></li>
-      		<li><a href="#createstream">Create</a></li>
-      		<li id="current"><a href="#viewstream">View</a></li>
-      		<li><a href="#searchstream">Search</a></li>
-      		<li><a href="#trendingstream">Trending</a></li>
-      		<li><a href="#socialstream">Social</a></li>
-		</ul>    
+	<ul class="header group" id="tabs">
+     		<li><a href="#managestream">Manage</a></li>
+     		<li><a href="#createstream">Create</a></li>
+     		<li><a href="#viewstream">View</a></li>
+     		<li><a href="#searchstream">Search</a></li>
+     		<li><a href="#trendingstream">Trending</a></li>
+     		<li><a href="#socialstream">Social</a></li>
+	</ul>    
    
-	<div class="tabContent" id="managestream">
-    </div>
-    
- 	<div class="tabContent" id="searchstream">
-    </div>
-    
- 	<div class="tabContent" id="trendingstream">
-    </div>
-    
- 	<div class="tabContent" id="socialstream">
+    <div class="glow"></div>
+  	<div class="tabContent" id="managestream">
+      <div class="manage-own">
+        <form action="<%= configManager.getManageAlbumsUrl() %>"
+              method="post">     
+	        <p>MANAGE STREAMS</p>
+	        <p>Streams I own:</p>
+	        <table border="1">
+			 <tr>
+			 	<th>Name</th>
+			 	<th>Last New Picture</th>
+			 	<th>Number of Pictures</th>
+			 	<th>Delete</th>
+			 </tr>
+			 <tr>
+			 	<td>Adnan's World</td>
+			 	<td>8/19/2013</td>
+			 	<td>314</td>
+				<td><input type="checkbox" name="delete-box" value="Erase"></td>
+			 </tr>
+		    <%
+		      Iterable<Album> albumIter = albumManager.getOwnedAlbums(currentUser.getUserId());
+		      ArrayList<Album> albums = new ArrayList<Album>();
+		      try {
+		        for (Album album : albumIter) {
+		        	albums.add(album);
+		        }
+		      } catch (DatastoreNeedIndexException e) {
+		        pageContext.forward(configManager.getErrorPageUrl(
+		          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+		      }
+		
+		      for (Album album : albums) {
+		    %>
+				 <tr>
+				 	<td><a href=<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), 
+				 			album.getId().toString(), 
+				 			 ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM) %>> <%= album.getTitle() %></a></td>
+				 	<td><%= album.getSubscribers()%></td>
+				 	<td><%= album.getTags()%></td>
+					<td><input type="checkbox" name="delete-box" value=<%= album.getId().toString() %>></td>
+				 </tr>
+			 <%	} %>
+			 </table> 
+	        <input id="delete-streams" class="active btn" type="submit" value="Delete Checked">
+ 	    </form>      
+      </div>
     </div>
     
 	<div class="tabContent" id="createstream">
-    </div>
-    
+      <div class="create">
+        <p>CREATE STREAMS</p>
+        <form action="<%= configManager.getCreateAlbumUrl() %>"
+              method="post">     
+	        <input id="stream-name" class="input text" name="stream" type="text" value="Stream name here...">
+	        <p>Name your stream</p>
+	        <textarea name="subscribers" placeholder="Add subscribers using comma as a separator..."></textarea>
+	        <p>Add subscribers</p>
+	        <input id="btn-post" class="active btn" type="submit" value="Create Stream">
+		     <div class="tags">
+		     	<textarea name="tags" placeholder="Add tags using comma as a separator..."></textarea>
+		     	<p>Tag your stream</p>
+		     	<input id="cover-url" class="input text" name="streamCoverUrl" type="text" value="URL here...">
+		     	<p>URL to cover image</p>
+		     	<p>(Can be empty)</p>        
+		     </div>
+	    </form>
+     </div>
+     </div>
+        
 	<div class="tabContent" id="viewstream">
     
-    <div class="glow"></div>
-
+	<%
+	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID); 
+	if(streamId != null && !streamId.isEmpty())
+	{
+		String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
+	%>
+	<div class="page-title">
+		<p>Stream Name: "<%= albumManager.getAlbum(streamUserId, Long.parseLong(streamId)).getTitle() %>"
+		  for user: "<%= albumManager.getAlbum(streamUserId, Long.parseLong(streamId)).getOwnerNickname() %>"
+		</p>
+	</div>
     <div id="upload-wrap">
       <div id="upload">
         <div class="account group">
@@ -186,9 +267,7 @@ function toggleCommentPost(id, expanded) {
           <div id="account-name">
             <h2><%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %></h2>
             <p><%= currentUser.getEmail() %>
-              | <a
-                href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign
-                out</a>
+              | <a href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign out</a>
             </p>
           </div>
           <!-- /#account-name -->
@@ -196,13 +275,14 @@ function toggleCommentPost(id, expanded) {
         <!-- /.account -->
         <a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Choose an image</a>
         <div id="upload-form" style="display:none">
-          <form action="<%= serviceManager.getUploadUrl() %>" method="post"
+          <form action="<%= serviceManager.getUploadUrl() %>" method="post" 
             enctype="multipart/form-data">
             <input id="input-file" class="inactive file btn" type="file" name="photo"
               onchange="onFileSelected()">
             <textarea name="title" placeholder="Write a description"></textarea>
             <input id="btn-post" class="active btn" type="submit" value="Post">
             <a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
+            <textarea name="stream-id" value=<%= streamId %>></textarea>
           </form>
         </div>
       </div>
@@ -213,6 +293,7 @@ function toggleCommentPost(id, expanded) {
     <!-- KK -->
     <%
       Iterable<Photo> photoIter = photoManager.getActivePhotos();
+      //Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(currentUser.getUserId(), streamId);
       ArrayList<Photo> photos = new ArrayList<Photo>();
       try {
         for (Photo photo : photoIter) {
@@ -270,9 +351,34 @@ function toggleCommentPost(id, expanded) {
     <%
         count++;
       }
+	}
+	else {
+	%>
+        <p>SEARCH STREAMS</p>
+	<%	
+	}
     %>
   </div>
   <!-- /.view -->  
+ 	<div class="tabContent" id="searchstream">
+      <div>
+        <p>SEARCH STREAMS</p>
+      </div>
+    </div>
+    
+ 	<div class="tabContent" id="trendingstream">
+      <div>
+        <p>TRENDING STREAMS</p>
+      </div>
+    </div>
+    
+ 	<div class="tabContent" id="socialstream">
+      <div>
+        <p>SOCIAL STREAMS</p>
+      </div>
+    </div>
+    
+  
   </div>
   <!-- /.wrap -->
 </body>

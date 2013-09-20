@@ -29,6 +29,14 @@ public final class ServletUtils extends HttpServlet {
   public static final String REQUEST_PARAM_NAME_PRIVATE = "private";
   public static final String REQUEST_PARAM_NAME_COMMENT = "comment";
   public static final String REQUEST_PARAM_NAME_TARGET_URL = "targetUrl";
+  public static final String REQUEST_PARAM_NAME_TAB_ID = "tabId";
+  public static final String REQUEST_PARAM_NAME_STREAM = "stream";
+  public static final String REQUEST_PARAM_NAME_SUBSCRIBERS = "subscribers";
+  public static final String REQUEST_PARAM_NAME_TAGS = "tags";
+  public static final String REQUEST_PARAM_NAME_COVER_IMAGE_URL = "coverImageUrl";
+  public static final String REQUEST_PARAM_NAME_VIEW_STREAM = "viewstream";
+  public static final String REQUEST_PARAM_NAME_CHECKBOX_GROUP = "delete-box";
+  public static final String REQUEST_PARAM_NAME_ALBUM_ID = "stream-id";
   // The error code.
   public static final String REQUEST_PARAM_NAME_CODE = "code";
   public static final String[] USER_ICONS = new String[] {

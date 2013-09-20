@@ -27,6 +27,7 @@ public class PhotoSql extends DemoEntitySql implements Photo {
   private BlobKey blobKey;
   private boolean shared;
   private String title;
+  private String albumId;
   private String ownerEmail;
   private String ownerId;
   private long uploadTime;
@@ -82,6 +83,16 @@ public class PhotoSql extends DemoEntitySql implements Photo {
   @Override
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  @Override
+  public String getAlbumId() {
+    return albumId;
+  }
+
+  @Override
+  public void setAlbumId(String albumId) {
+    this.albumId = albumId;
   }
 
   @Override

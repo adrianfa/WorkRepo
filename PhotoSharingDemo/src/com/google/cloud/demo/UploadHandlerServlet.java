@@ -58,6 +58,10 @@ public class UploadHandlerServlet extends HttpServlet {
 
       String isPrivate = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_PRIVATE);
       photo.setShared(isPrivate == null);
+      
+      //MM: added album support
+      String albumId = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID);
+      photo.setAlbumId(albumId);
 
       photo.setOwnerNickname(ServletUtils.getProtectedUserNickname(user.getNickname()));
 
@@ -72,7 +76,7 @@ public class UploadHandlerServlet extends HttpServlet {
     }
     if (succeeded) {
       res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-          req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user.getUserId(), id));
+          req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user.getUserId(), id, "viewstream"));
     } else {
       res.sendError(400, "Request cannot be handled.");
     }

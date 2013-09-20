@@ -15,6 +15,7 @@
 package com.google.cloud.demo.model.nosql;
 
 import com.google.cloud.demo.ConfigManager;
+import com.google.cloud.demo.model.AlbumManager;
 import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoEntityManagerFactory;
 import com.google.cloud.demo.model.DemoUserManager;
@@ -29,6 +30,7 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
   private DemoUserManagerNoSql demoUserManager;
   private PhotoManagerNoSql photoManager;
   private CommentManagerNoSql commentManager;
+  private AlbumManagerNoSql albumManager;
   private boolean initialized;
 
   @Override
@@ -39,6 +41,11 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
   @Override
   public CommentManager getCommentManager() {
     return commentManager;
+  }
+  
+  @Override
+  public AlbumManager getAlbumManager() {
+    return albumManager;
   }
 
   @Override
@@ -53,6 +60,7 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
       demoUserManager = new DemoUserManagerNoSql();
       photoManager = new PhotoManagerNoSql(demoUserManager);
       commentManager = new CommentManagerNoSql(demoUserManager);
+      albumManager = new AlbumManagerNoSql(demoUserManager);
       initialized = true;
     } else {
       throw new IllegalStateException("Should not initialize the factory more than once.");

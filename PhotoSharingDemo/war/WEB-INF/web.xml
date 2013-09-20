@@ -22,6 +22,21 @@
   </servlet>
 
   <servlet>
+    <servlet-name>CreateAlbumServlet</servlet-name>
+    <servlet-class>com.google.cloud.demo.CreateAlbumServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ManageAlbumsServlet</servlet-name>
+    <servlet-class>com.google.cloud.demo.ManageAlbumsServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>DataStoreViewer</servlet-name>
+    <servlet-class>com.google.cloud.demo.DataStoreViewer</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>CleanUpServlet</servlet-name>
     <servlet-class>com.google.cloud.demo.CleanupCronServlet</servlet-class>
   </servlet>
@@ -34,6 +49,21 @@
   <servlet-mapping>
     <servlet-name>CommentPostServlet</servlet-name>
     <url-pattern>/post</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>CreateAlbumServlet</servlet-name>
+    <url-pattern>/create</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ManageAlbumsServlet</servlet-name>
+    <url-pattern>/manage</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>DataStoreViewer</servlet-name>
+    <url-pattern>/data</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

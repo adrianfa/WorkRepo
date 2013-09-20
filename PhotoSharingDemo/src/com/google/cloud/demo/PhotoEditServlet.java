@@ -61,10 +61,10 @@ public class PhotoEditServlet extends HttpServlet {
     if (succeeded) {
       if (delete != null) {
         res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-            req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), null, null));
+            req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), null, null, null));
       } else {
         res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-            req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user, id));
+            req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user, id, null));
       }
     } else {
       res.sendError(400, "Request cannot be handled.");

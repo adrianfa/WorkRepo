@@ -38,6 +38,14 @@ public interface PhotoManager extends DemoEntityManager<Photo> {
   Iterable<Photo> getOwnedPhotos(String userId);
 
   /**
+   * Queries an {@code Iterable} collection of photos owned by the user.
+   *
+   * @param userId the user id.
+   * @return an {@code Iterable} collection of photos.
+   */
+  Iterable<Photo> getOwnedAlbumPhotos(String userId, String albumId);
+
+  /**
    * Queries all photos shared to a user with specific user id. The result set
    * does not include photos owned by the user.
    *

@@ -23,7 +23,7 @@ body {
   height: 8px;
   position: absolute;
   top: 80px;
-  left: 40px;
+  left: 300px;
   opacity: 1;
   border-top: 1px solid rgba(0, 0, 0, 0.4);
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .3)), to(transparent));
@@ -35,52 +35,35 @@ h1 {
   position: relative;
 }
 
-.tablist {
-    list-style:none; 
-    height:2em;
-    padding:0; 
-    margin:0; 
-    border: none;
-  	position: fixed;
-  	top: 40px;
+
+ul#tabs { list-style-type: none; margin: 50px 0 0 0; padding: 0 0 0.3em 0; }
+ul#tabs li { display: inline; }
+ul#tabs li a { color: #42454a; background-color: #dedbde; border: 1px solid #c9c3ba; border-bottom: none; padding: 0.3em; text-decoration: none; }
+ul#tabs li a:hover { background-color: #f1f0ee; }
+ul#tabs li a.selected { color: #000; background-color: #f1f0ee; font-weight: bold; padding: 0.7em 0.3em 0.38em 0.3em; }
+div.tabContent { 
+	border-color: transparent;
+	padding: none; 
+	background-color: transparent; 
 }
 
-.tablist li {
-    float:left; 
-    margin-right:0.13em; 
+div.tabContent.hide { display: none; }
+
+div.tabContent#createstream .create {
+	width:970px;
+	margin: 80px 0 0 0;
 }
 
-.tablist li a {
-    display:block;
-    padding:0 1em;
-    text-decoration:none;
-    border:0.06em solid #000;
-    border-bottom:0;
-    font:bold 0.88em/2em arial,geneva,helvetica,sans-serif;
-    color:#000;
-    background-color:#ccc;
-
-    /* CSS 3 elements */
-    webkit-border-top-right-radius:0.50em;
-    -webkit-border-top-left-radius:0.50em;
-    -moz-border-radius-topright:0.50em;
-    -moz-border-radius-topleft:0.50em;
-    border-top-right-radius:0.50em;
-    border-top-left-radius:0.50em;
+div.tabContent#createstream .create .tags {
+	position:fixed;
+	top:110px;
+	right:650px;
 }
 
-.tablist li a:hover {
-    background:#3cf; 
-    color:#fff;
-    text-decoration:none;
-}
-
-.tablist li#current a {
-    background-color: #777;
-    color: #fff;
-}
-.tablist li#current a:hover {
-    background: #39C;
+div.tabContent#viewstream .page-title {
+	width:570px;
+	margin: 80px 0 0 0;
+	font-weight: bold;
 }
 
 .tabContent { 
@@ -234,7 +217,7 @@ textarea {
   border-radius: 3px;
   box-shadow: 0 0 2px #d8d8d8;
   margin: 10px 0 10px 0;
-  margin-top: 77px;
+  margin-top: 17px;
   float: left;
   width: 330px;
 }

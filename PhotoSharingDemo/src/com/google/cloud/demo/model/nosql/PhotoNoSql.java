@@ -33,6 +33,7 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   static final String FIELD_NAME_UPLOAD_TIME = "uploadTime";
   static final String FIELD_NAME_ACTIVE = "active";
   static final String EMPTY_TITLE = "no title";
+  static final String FIELD_NAME_ALBUM_ID = "albumId";
 
 
   public PhotoNoSql(Entity entity) {
@@ -77,6 +78,17 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   @Override
   public void setTitle(String title) {
     entity.setProperty(FIELD_NAME_TITLE, title);
+  }
+
+  @Override
+  public String getAlbumId() {
+	  String ret = (String) entity.getProperty(FIELD_NAME_ALBUM_ID);
+    return ret; 
+  }
+
+  @Override
+  public void setAlbumId(String albumId) {
+    entity.setProperty(FIELD_NAME_ALBUM_ID, albumId);
   }
 
   @Override

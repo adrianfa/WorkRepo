@@ -132,20 +132,28 @@ public class PhotoServiceManager {
    *
    * @return the url string to the main page.
    */
-  public String getRedirectUrl(String targetUrl, String userId, String id) {
+  public String getRedirectUrl(String targetUrl, String userId, String id, String tabId) {
     if (targetUrl == null) {
       targetUrl = configManager.getMainPageUrl();
     }
     StringBuilder builder = new StringBuilder(targetUrl);
-    if (userId != null || id != null) {
+    if (userId != null) {
       builder.append("?")
-          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
-          .append("=")
-          .append(id)
-          .append("&")
           .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
           .append("=")
           .append(userId);
+    }
+    if(id != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+          .append("=")
+          .append(id);	
+    }
+    if (tabId != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+	      .append("=")
+	      .append(tabId);
     }
     return builder.toString();
   }

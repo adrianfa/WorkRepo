@@ -34,6 +34,10 @@ public interface Photo extends DemoEntity {
   String getTitle();
 
   void setTitle(String title);
+  
+  String getAlbumId();
+
+  void setAlbumId(String albumId);
 
   String getOwnerNickname();
 

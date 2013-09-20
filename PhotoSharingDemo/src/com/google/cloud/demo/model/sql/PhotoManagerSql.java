@@ -87,6 +87,12 @@ public class PhotoManagerSql extends DemoEntityManagerSql<Photo> implements Phot
   }
 
   @Override
+  public Iterable<Photo> getOwnedAlbumPhotos(String userId, String albumId) {
+    return getEntitiesInTransaction(SQL_SELECT_ALL_ACTIVE_PHOTOS);    
+    //MM: TODO implement for real
+  }
+
+  @Override
   public Photo deleteEntity(final Photo entity) {
     return runInTransaction(new TransactionalOperation<Photo>() {
       @Override

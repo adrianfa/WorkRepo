@@ -15,6 +15,7 @@ package com.google.cloud.demo;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.demo.model.AlbumManager;
 import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoEntityManagerFactory;
 import com.google.cloud.demo.model.DemoUser;
@@ -77,8 +78,12 @@ public class AppContext {
   }
 
   public CommentManager getCommentManager() {
-    return entityManagerFactory.getCommentManager();
-  }
+	    return entityManagerFactory.getCommentManager();
+	  }
+
+  public AlbumManager getAlbumManager() {
+	    return entityManagerFactory.getAlbumManager();
+	  }
 
   public ConfigManager getConfigManager() {
     return configManager;
