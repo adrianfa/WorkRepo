@@ -30,6 +30,7 @@ import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.PhotoManager;
 import com.google.cloud.demo.model.Utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -168,7 +169,11 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
     return null;
   }
 
-  public void deactiveAlbumPhotos(String userId, long id) {
+  @Override
+  public void deactivateAlbumPhotos(String userId, long id) {
 	  Iterable<Photo> photoIter = getOwnedAlbumPhotos(userId, Long.toString(id));
+      for (Photo photo : photoIter) {
+    	  deactivePhoto(userId, photo.getId());
+      }
   }
 }

@@ -218,6 +218,12 @@ public class PhotoManagerSql extends DemoEntityManagerSql<Photo> implements Phot
       }});
   }
 
+  @Override
+  public void deactivateAlbumPhotos(String userId, long id) {
+	  //MM: TODO actual implementation
+	  return ;
+  }
+
   /**
    * Helper callback classes that does result processing.
    */

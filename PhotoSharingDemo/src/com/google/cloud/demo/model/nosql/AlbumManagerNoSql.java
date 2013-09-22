@@ -20,10 +20,12 @@ import com.google.cloud.demo.model.Utils;
 public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	AlbumManager {
 	  private static final Logger logger = Logger.getLogger(PhotoManagerNoSql.class.getCanonicalName());
 	  private DemoUserManagerNoSql userManager;
+	  private PhotoManagerNoSql photoManager;
 
-	  public AlbumManagerNoSql(DemoUserManagerNoSql userManager) {
+	  public AlbumManagerNoSql(DemoUserManagerNoSql userManager, PhotoManagerNoSql photoManager) {
 	    super(Album.class);
 	    this.userManager = userManager;
+	    this.photoManager = photoManager;
 	  }
 
 	  @Override
@@ -95,6 +97,7 @@ public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	
 	@Override
 	public Album deactiveAlbum(String userId, long id) {
 	    Utils.assertTrue(userId != null, "user id cannot be null");
+	    photoManager.deactivateAlbumPhotos(userId, id);
 	    DatastoreService ds = getDatastoreService();
 	    Transaction txn = ds.beginTransaction();
 	    try {

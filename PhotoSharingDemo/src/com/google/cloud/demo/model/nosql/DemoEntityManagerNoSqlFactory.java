@@ -60,7 +60,7 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
       demoUserManager = new DemoUserManagerNoSql();
       photoManager = new PhotoManagerNoSql(demoUserManager);
       commentManager = new CommentManagerNoSql(demoUserManager);
-      albumManager = new AlbumManagerNoSql(demoUserManager);
+      albumManager = new AlbumManagerNoSql(demoUserManager, photoManager);
       initialized = true;
     } else {
       throw new IllegalStateException("Should not initialize the factory more than once.");
