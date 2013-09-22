@@ -21,8 +21,10 @@ import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.PhotoManager;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author Michael Tang (ntang@google.com)
  */
 public class UploadHandlerServlet extends HttpServlet {
+	  private static final Logger logger =
+		      Logger.getLogger(UploadHandlerServlet.class.getCanonicalName());
+
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
     AppContext appContext = AppContext.getAppContext();
@@ -47,6 +52,7 @@ public class UploadHandlerServlet extends HttpServlet {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
     List<BlobKey> keys = blobs.get("photo");
     String id = null;
+    String albumId = null;
     boolean succeeded = false;
     if (keys != null && keys.size() > 0) {
       PhotoManager photoManager = appContext.getPhotoManager();
@@ -59,8 +65,15 @@ public class UploadHandlerServlet extends HttpServlet {
       String isPrivate = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_PRIVATE);
       photo.setShared(isPrivate == null);
       
+      Enumeration paramNames = req.getParameterNames();
+      while(paramNames.hasMoreElements())
+      {
+            String paramName =
+      (String)paramNames.nextElement();
+            logger.info(paramName);
+      }
       //MM: added album support
-      String albumId = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID);
+      albumId = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID);
       photo.setAlbumId(albumId);
 
       photo.setOwnerNickname(ServletUtils.getProtectedUserNickname(user.getNickname()));
@@ -76,7 +89,7 @@ public class UploadHandlerServlet extends HttpServlet {
     }
     if (succeeded) {
       res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-          req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user.getUserId(), id, "viewstream"));
+          req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user.getUserId(), id, albumId, "viewstream"));
     } else {
       res.sendError(400, "Request cannot be handled.");
     }

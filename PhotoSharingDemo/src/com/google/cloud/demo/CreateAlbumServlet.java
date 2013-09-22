@@ -51,7 +51,7 @@ public class CreateAlbumServlet extends HttpServlet {
     }
     if (succeeded) {
       res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, "managestream"));
+              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "managestream"));
     } else {
       res.sendError(400, builder.toString());
     }

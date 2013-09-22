@@ -167,4 +167,8 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
     }
     return null;
   }
+
+  public void deactiveAlbumPhotos(String userId, long id) {
+	  Iterable<Photo> photoIter = getOwnedAlbumPhotos(userId, Long.toString(id));
+  }
 }

@@ -39,14 +39,25 @@ function init() {
 
     // Assign onclick events to the tab links, and
     // highlight the first tab
-	var tabId = getUrlVars()["tabId"];
-	if (!tabId || tabId.length === 0)
-		tabId = "managestream";
 	
     for ( var id in tabLinks ) {
       tabLinks[id].onclick = showTab;
       tabLinks[id].onfocus = function() { this.blur() };
-      if ( id == tabId ) tabLinks[id].className = 'selected';
+    }
+    
+    var tabId = window.location.href;
+    var hashPos = tabId.lastIndexOf ( '#' );
+	if (hashPos != -1) {
+		tabId = getHash(tabId);
+	}
+	else {
+		tabId = getUrlVars()["tabId"];
+		if (!tabId || tabId.length === 0)
+			tabId = "managestream";
+	}
+	
+    for ( var id in tabLinks ) {
+        if ( id == tabId ) tabLinks[id].className = 'selected';
     }
 
     // Hide all content divs except the first
@@ -207,7 +218,7 @@ function toggleCommentPost(id, expanded) {
 		      for (Album album : albums) {
 		    %>
 				 <tr>
-				 	<td><a href=<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), 
+				 	<td><a href=<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null, 
 				 			album.getId().toString(), 
 				 			 ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM) %>> <%= album.getTitle() %></a></td>
 				 	<td><%= album.getSubscribers()%></td>
@@ -245,15 +256,22 @@ function toggleCommentPost(id, expanded) {
 	<div class="tabContent" id="viewstream">
     
 	<%
-	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID); 
+	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID); 
 	if(streamId != null && !streamId.isEmpty())
 	{
 		String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
 	%>
 	<div class="page-title">
-		<p>Stream Name: "<%= albumManager.getAlbum(streamUserId, Long.parseLong(streamId)).getTitle() %>"
-		  for user: "<%= albumManager.getAlbum(streamUserId, Long.parseLong(streamId)).getOwnerNickname() %>"
+		<%
+			Album albm = albumManager.getAlbum(streamUserId, Long.parseLong(streamId));
+			if (albm != null) {	
+		%>
+				<p>Stream Name: "<%= albm.getTitle()%>"
+		  		for user: "<%= albm.getOwnerNickname() %>"
 		</p>
+		<%
+			}
+		%>
 	</div>
     <div id="upload-wrap">
       <div id="upload">
@@ -275,14 +293,13 @@ function toggleCommentPost(id, expanded) {
         <!-- /.account -->
         <a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Choose an image</a>
         <div id="upload-form" style="display:none">
-          <form action="<%= serviceManager.getUploadUrl() %>" method="post" 
+          <form action="<%= serviceManager.getUploadUrl() + "?stream-id=" + streamId %>" method="post" 
             enctype="multipart/form-data">
             <input id="input-file" class="inactive file btn" type="file" name="photo"
               onchange="onFileSelected()">
             <textarea name="title" placeholder="Write a description"></textarea>
             <input id="btn-post" class="active btn" type="submit" value="Post">
             <a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
-            <textarea name="stream-id" value=<%= streamId %>></textarea>
           </form>
         </div>
       </div>
@@ -292,8 +309,8 @@ function toggleCommentPost(id, expanded) {
 
     <!-- KK -->
     <%
-      Iterable<Photo> photoIter = photoManager.getActivePhotos();
-      //Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(currentUser.getUserId(), streamId);
+      //Iterable<Photo> photoIter = photoManager.getActivePhotos();
+      Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(currentUser.getUserId(), streamId);
       ArrayList<Photo> photos = new ArrayList<Photo>();
       try {
         for (Photo photo : photoIter) {
