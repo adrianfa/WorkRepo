@@ -262,6 +262,11 @@ textarea {
   width: 200px;
 }
 
+#feed  .post .owner .desc img {
+  background: url('img/check.png') no-repeat 0 30%;
+  padding: 0 0 5px 18px;
+}
+
 .feed .post .owner .desc h3,
 .feed .post .usr h3 {
   margin: 0;

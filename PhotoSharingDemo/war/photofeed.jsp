@@ -75,7 +75,13 @@ function init() {
   }
 
   function pageShow() {
-		alert("We got a pageShow call!...");  
+		//alert("We got a pageShow call!...");  
+		var element = document.getElementById("imm");
+		var color = element.style.visibility;
+		if (color == "visible")
+			element.style.visibility = "hidden";			
+		else
+			element.style.visibility = "visible";
   }
   
   function showTab() {
@@ -261,122 +267,163 @@ function toggleCommentPost(id, expanded) {
 	{
 		String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
 	%>
-	<div class="page-title">
+		<div class="page-title">
 		<%
-			Album albm = albumManager.getAlbum(streamUserId, Long.parseLong(streamId));
-			if (albm != null) {	
+		Album albm = albumManager.getAlbum(streamUserId, Long.parseLong(streamId));
+		if (albm != null) {	
 		%>
-				<p>Stream Name: "<%= albm.getTitle()%>"
-		  		for user: "<%= albm.getOwnerNickname() %>"
-		</p>
+			<p>Stream Name: "<%= albm.getTitle()%>"
+	  		for user: "<%= albm.getOwnerNickname() %>" </p>
 		<%
-			}
+		}
 		%>
-	</div>
-    <div id="upload-wrap">
-      <div id="upload">
-        <div class="account group">
-          <div id="account-thumb">
-            <img
-              src="<%= ServletUtils.getUserIconImageUrl(currentUser.getUserId()) %>"
-              alt="Unknown User Icon" />
-          </div>
-          <!-- /#account-thumb -->
-          <div id="account-name">
-            <h2><%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %></h2>
-            <p><%= currentUser.getEmail() %>
-              | <a href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign out</a>
-            </p>
-          </div>
-          <!-- /#account-name -->
-        </div>
-        <!-- /.account -->
-        <a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Choose an image</a>
-        <div id="upload-form" style="display:none">
-          <form action="<%= serviceManager.getUploadUrl() + "?stream-id=" + streamId %>" method="post" 
-            enctype="multipart/form-data">
-            <input id="input-file" class="inactive file btn" type="file" name="photo"
-              onchange="onFileSelected()">
-            <textarea name="title" placeholder="Write a description"></textarea>
-            <input id="btn-post" class="active btn" type="submit" value="Post">
-            <a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
-          </form>
-        </div>
-      </div>
-      <!-- /#upload -->
-    </div>
-    <!-- /#upload-wrap -->
+		</div>
+    	<div id="upload-wrap">
+      		<div id="upload">
+        		<div class="account group">
+          			<div id="account-thumb">
+            			<img
+              				src="<%= ServletUtils.getUserIconImageUrl(currentUser.getUserId()) %>"
+              				alt="Unknown User Icon" />
+       				</div>
+          			<!-- /#account-thumb -->
+          			<div id="account-name">
+            			<h2><%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %></h2>
+            			<p><%= currentUser.getEmail() %>
+             | 				<a href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign out</a>
+            			</p>
+          			</div>
+          		<!-- /#account-name -->
+        		</div>
+        		<!-- /.account -->
+        		<a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Choose an image</a>
+        		<div id="upload-form" style="display:none">
+          			<form action="<%= serviceManager.getUploadUrl() + "?stream-id=" + streamId %>" method="post" 
+            			enctype="multipart/form-data">
+            			<input id="input-file" class="inactive file btn" type="file" name="photo"
+              				onchange="onFileSelected()">
+            			<textarea name="title" placeholder="Write a description"></textarea>
+            			<input id="btn-post" class="active btn" type="submit" value="Post">
+            			<a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
+          			</form>
+        		</div>
+      		</div>
+      		<!-- /#upload -->
+    	</div>
+    	<!-- /#upload-wrap -->
 
-    <!-- KK -->
-    <%
-      //Iterable<Photo> photoIter = photoManager.getActivePhotos();
-      Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(currentUser.getUserId(), streamId);
-      ArrayList<Photo> photos = new ArrayList<Photo>();
-      try {
-        for (Photo photo : photoIter) {
-          photos.add(photo);
-        }
-      } catch (DatastoreNeedIndexException e) {
-        pageContext.forward(configManager.getErrorPageUrl(
-          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
-      }
+    	<!-- KK -->
+    	<%
+      	//Iterable<Photo> photoIter = photoManager.getActivePhotos();
+      	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(currentUser.getUserId(), streamId);
+      	ArrayList<Photo> photos = new ArrayList<Photo>();
+      	try {
+        	for (Photo photo : photoIter) {
+          		photos.add(photo);
+        	}
+      	} catch (DatastoreNeedIndexException e) {
+        	pageContext.forward(configManager.getErrorPageUrl(
+          		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+      	}
 
-      int count = 0;
-      for (Photo photo : photos) {
-        String firstClass = "";
-        String lastClass = "";
-        if (count == 0) {
-          firstClass = "first";
-        }
-        if (count == photos.size() - 1) {
-          lastClass = "last";
-        }
-    %>
-    <div class="feed <%= firstClass %> <%= lastClass %>">
-      <div class="post group">
-        <div class="image-wrap">
-          <img class="photo-image"
-            src="<%= serviceManager.getImageDownloadUrl(photo)%>"
-            alt="Photo Image" />
-        </div>
-        <div class="owner group">
-          <!-- MM: took out here code for cats images -->
-          <div class="desc">
-            <h3><%= ServletUtils.getProtectedUserNickname(photo.getOwnerNickname()) %></h3>
-            
-            <p class="timestamp"><%= ServletUtils.formatTimestamp(photo.getUploadTime()) %></p>
-            <p>
-            <p><c:out value="<%= photo.getTitle() %>" escapeXml="true"/>
-          </div>
-          <!-- /.desc -->
-        </div>
-        <!-- /.usr -->
-      </div>
-      <!-- /.post -->
+      	int count = 0;
+      	for (Photo photo : photos) {
+        	String firstClass = "";
+        	String lastClass = "";
+        	if (count == 0) {
+          		firstClass = "first";
+        	}
+        	if (count == photos.size() - 1) {
+          		lastClass = "last";
+        	}
+    	%>
+    		<div class="feed <%= firstClass %> <%= lastClass %>"  onclick="pageShow()">
+      			<div class="post group">
+        			<div class="image-wrap">
+          				<img class="photo-image"
+            				src="<%= serviceManager.getImageDownloadUrl(photo)%>"
+            				alt="Photo Image" />
+        			</div>
+        			<div class="owner group">
+          			<!-- MM: took out here code for cats images -->
+          				<div class="desc">
+           				<h3>
+            					<%= ServletUtils.getProtectedUserNickname(photo.getOwnerNickname()) %></h3>          
+            				<p class="timestamp"><%= ServletUtils.formatTimestamp(photo.getUploadTime()) %></p>
+            				<p>
+            				<p><c:out value="<%= photo.getTitle() %>" escapeXml="true"/>
+           					<img class="check" src="img/check.png" id="imm" />         				
+          			</div>
+       				<!-- /.desc -->
+        		</div>
+        		<!-- /.usr -->
+      		</div>
+      		<!-- /.post -->
       
-      <%
-        Iterable<Comment> comments = commentManager.getComments(photo);
-        for (Comment comment : comments) {
-       %>
-		<!-- MM: took out here code for iterative comment -->
-      <%
-        }
-      %>
-      	<!-- MM: took out here code for last comment -->   
-    </div>
-    <!-- /.feed -->
-    <%
-        count++;
-      }
+      		<%
+        	Iterable<Comment> comments = commentManager.getComments(photo);
+        	for (Comment comment : comments) {
+        	}
+      		%>
+      		<!-- MM: took out here code for last comment -->   
+    	</div>
+    	<!-- /.feed -->
+   	<%
+        	count++;
+      	}
 	}
 	else {
+    	albumIter = albumManager.getActiveAlbums();
+      	albums = new ArrayList<Album>();
+      	try {
+        	for (Album album : albumIter) {
+	        	albums.add(album);
+	        }
+      	} catch (DatastoreNeedIndexException e) {
+	        pageContext.forward(configManager.getErrorPageUrl(
+	          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+      	}
+
+      	int count = 0;
+      	for (Album album : albums) {
+	    	  
 	%>
-        <p>SEARCH STREAMS</p>
+     		<div class="feed">
+	      		<div class="post group">
+		        	<div class="image-wrap">
+		        		<a href="<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null, 
+				 				album.getId().toString(), 
+				 			 	ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM) %>"> 
+		          		<img class="photo-image"
+		            		src="<%= ServletUtils.getUserIconImageUrl(album.getOwnerId())%>"
+			 			 	alt="Photo Image" /></a>
+	        		</div>
+		        	<div class="owner group">
+		          		<div class="desc">
+		            		<h3><%= ServletUtils.getProtectedUserNickname(album.getOwnerNickname()) %></h3>	            
+		            		<p class="timestamp"><%= ServletUtils.formatTimestamp(album.getUploadTime()) %></p>
+		            		<p>
+		            		<p><c:out value="<%= album.getTitle() %>" escapeXml="true"/>
+		          		</div>
+		          		<!-- /.desc -->
+        			</div>
+		        	<!-- /.usr -->
+	      		</div>
+	      		<!-- /.post -->
+		      
+     <%
+	        	//Iterable<Comment> comments = commentManager.getComments(photo);
+	        	//for (Comment comment : comments) {}
+     %>
+   			</div>
+    		<!-- /.feed -->
 	<%	
+			count++;
+      	}
 	}
     %>
-  </div>
-  <!-- /.view -->  
+	</div>
+	<!-- /.view -->  
  	<div class="tabContent" id="searchstream">
       <div>
         <p>SEARCH STREAMS</p>

@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.demo.model.Album;
 import com.google.cloud.demo.model.AlbumManager;
 import com.google.cloud.demo.model.Photo;
@@ -90,8 +91,13 @@ public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	
 
 	@Override
 	public Iterable<Album> getActiveAlbums() {
-		// TODO Auto-generated method stub
-		return null;
+	    Query query = new Query(getKind());
+	    Query.Filter filter = new Query.FilterPredicate(AlbumNoSql.FIELD_NAME_ACTIVE,
+	        FilterOperator.EQUAL, true);
+	    query.addSort(AlbumNoSql.FIELD_NAME_UPLOAD_TIME, SortDirection.DESCENDING);
+	    query.setFilter(filter);
+	    FetchOptions options = FetchOptions.Builder.withDefaults();
+	    return queryEntities(query, options);    
 	}
 
 	@Override

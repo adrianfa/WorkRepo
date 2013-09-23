@@ -12,7 +12,7 @@ public class AlbumNoSql extends DemoEntityNoSql implements Album {
 	  static final String FIELD_NAME_TITLE = "title";
 	  static final String FIELD_NAME_SHARED = "shared";
 	  static final String FIELD_NAME_BLOB_KEY = "blobKey";
-	  static final String FIELD_NAME_UPLOAD_TIME = "uploadTime";
+	  static final String FIELD_NAME_UPLOAD_TIME = "createTime";
 	  static final String FIELD_NAME_ACTIVE = "active";
 	  static final String EMPTY_TITLE = "no title";
 	  static final String FIELD_NAME_SUBSCRIBERS = "subscribers";
