@@ -55,15 +55,62 @@ div.tabContent#createstream .create {
 }
 
 div.tabContent#createstream .create .tags {
-	position:fixed;
-	top:110px;
-	right:650px;
+	position:relative;
+	top:-370px;
+	left:350px;
+}
+
+div.tabContent#searchstream .create {
+	width:970px;
+	margin: 80px 0 0 0;
+}
+
+div.tabContent#viewstream .create {
+	width:970px;
+	margin: 80px 0 0 0;
+}
+
+div.tabContent#managestream .create {
+	width:970px;
+	margin: 80px 0 0 0;
+}
+
+div.tabContent#trendingstream .create {
+	width:970px;
+	margin: 80px 0 0 0;
+}
+
+div.tabContent#socialstream .create {
+	width:970px;
+	margin: 80px 0 0 0;
 }
 
 div.tabContent#viewstream .page-title {
-	width:570px;
+	width:970px;
 	margin: 80px 0 0 0;
 	font-weight: bold;
+}
+
+div.tabContent#viewstream .create {
+  position:absolute;
+  top: 650px;
+  left: 30px;
+}
+
+div.tabContent#viewstream .next-3-pict {
+  position:relative;
+  top: 400px;
+  left: 5px;
+}
+
+div.tabContent#viewstream .box {
+  position:absolute;
+  top: 600px;
+  left: 20px;
+  width: 400px;
+  padding:10px;
+  border:5px solid gray;
+  margin:10px;
 }
 
 .tabContent { 

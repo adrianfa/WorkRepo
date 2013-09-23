@@ -167,9 +167,21 @@ function toggleCommentPost(id, expanded) {
   }
 }
 </script>
+
+ <%-- MCM: this is a "huge" page divided into divs. 
+    The server sends all the "pages" the client might want to look at as a single page 
+    with several divs. The client runs an application that allows him to pick a view
+    which will end up being a div he wants to look at from the whole page. 
+    This enables the fast switch between choices. --%>
+
 <title>Photofeed</title>
 <link rel="stylesheet" type="text/css" href="photofeed.css" />
 </head>
+
+ <%-- ************************************************************* --%>
+ <%-- MCM: All the tabs of the "views" the client might choose from --%>
+ <%-- ************************************************************* --%>
+
 
 <body onload="init()">
   <div class="wrap">
@@ -188,6 +200,10 @@ function toggleCommentPost(id, expanded) {
      		<li><a href="#trendingstream">Trending</a></li>
      		<li><a href="#socialstream">Social</a></li>
 	</ul>    
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the MANAGE view --%>
+     <%-- ******************************************************************* --%>
+         
    
     <div class="glow"></div>
   	<div class="tabContent" id="managestream">
@@ -236,8 +252,72 @@ function toggleCommentPost(id, expanded) {
 	        <input id="delete-streams" class="active btn" type="submit" value="Delete Checked">
  	    </form>      
       </div>
+      <div class="manage-own">
+        <form action="<%= configManager.getManageAlbumsUrl() %>"
+              method="post">
+                <p>Streams I subscribe to:</p>
+                <table border="1">
+                         <tr>
+                                <th>Name</th>
+                                <th>Last New Picture</th>
+                                <th>Number of Pictures</th>
+                                <th>Views</th>
+                                <th>Unsubscribe</th>
+                         </tr>
+                         <tr>
+                                <td>The grateful dead Berkely 1969</td>
+                                <td>8/20/2013</td>
+                                <td>314</td>
+                                <td>10M</td>
+                                <td><input type="checkbox" name="unsubscribe-box" value="Unsubscribe"></td>
+                         </tr>
+                         <tr>
+                                <td>Van Hallen</td>
+                                <td>7/4/2013</td>
+                                <td>56</td>
+                                <td>3141</td>
+                                <td><input type="checkbox" name="unsubscribe-box" value="Unsubscribe"></td>
+                         </tr>
+
+                    <%
+                      Iterable<Album> sub_albumsIter = albumManager.getOwnedAlbums(currentUser.getUserId());
+                      ArrayList<Album> sub_albums = new ArrayList<Album>();
+                      try {
+                        for (Album sub_album : sub_albumsIter) {
+                                sub_albums.add(sub_album);
+                        }
+                      } catch (DatastoreNeedIndexException e) {
+                        pageContext.forward(configManager.getErrorPageUrl(
+                          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+                      }
+
+                      for (Album sub_album : sub_albums) {
+                    %>
+                                 <tr>
+                                        <td><a href=<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null,
+                                                        sub_album.getId().toString(),
+                                                         ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM) %>> <%= sub_album.getTitle() %></a></td>
+                                        <td><%= sub_album.getSubscribers()%></td>
+                                        <td><%= sub_album.getTags()%></td>
+                                        <%-- MCM should replace the next line <td><%= Long.valueOf((Long)sub_album.getViews())%></td> --%>
+                                        <td><%= sub_album.getTags()%></td>
+                                        <td><input type="checkbox" name="unsubscribe-box" value=<%= sub_album.getId().toString() %>></td>
+                                 </tr>
+                         <%     } %>
+                         </table>
+                <input id="unsubscribe-streams" class="active btn" type="submit" value="Unsubscribe Checked">
+            </form>     
+      </div>
+
+
+
     </div>
     
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the CREATE view --%>
+     <%-- ******************************************************************* --%>
+
+
 	<div class="tabContent" id="createstream">
       <div class="create">
         <p>CREATE STREAMS</p>
@@ -246,6 +326,7 @@ function toggleCommentPost(id, expanded) {
 	        <input id="stream-name" class="input text" name="stream" type="text" value="Stream name here...">
 	        <p>Name your stream</p>
 	        <textarea name="subscribers" placeholder="Add subscribers using comma as a separator..."></textarea>
+	        <textarea name="message" placeholder="Optional message for invite..."></textarea>
 	        <p>Add subscribers</p>
 	        <input id="btn-post" class="active btn" type="submit" value="Create Stream">
 		     <div class="tags">
@@ -258,8 +339,14 @@ function toggleCommentPost(id, expanded) {
 	    </form>
      </div>
      </div>
-        
+
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the VIEW view --%>
+     <%-- ******************************************************************* --%>
+
 	<div class="tabContent" id="viewstream">
+    
+    <%-- MM: Here it prints the name and the owner of the album which we are showing --%>
     
 	<%
 	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID); 
@@ -278,6 +365,8 @@ function toggleCommentPost(id, expanded) {
 		}
 		%>
 		</div>
+		<%-- MM: we enable the user to pick up a picture to add to the stream --%>
+		
     	<div id="upload-wrap">
       		<div id="upload">
         		<div class="account group">
@@ -312,6 +401,7 @@ function toggleCommentPost(id, expanded) {
     	</div>
     	<!-- /#upload-wrap -->
 
+    <%-- MM: adds the new picture to the album  --%>
     	<!-- KK -->
     	<%
       	//Iterable<Photo> photoIter = photoManager.getActivePhotos();
@@ -326,6 +416,7 @@ function toggleCommentPost(id, expanded) {
           		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
       	}
 
+      // goes over the pictures, one by one, to be shown to the public
       	int count = 0;
       	for (Photo photo : photos) {
         	String firstClass = "";
@@ -422,22 +513,78 @@ function toggleCommentPost(id, expanded) {
       	}
 	}
     %>
+ <%-- MM:the More pictures button after the 3 shown pictures --%>
+    <div class="next-3-pict">
+    	<form action="<% /* it's supposed to show the next 3 */ %>"
+             method="post">    
+               <input id="btn-post" class="active btn" type="submit" value="More pictures">
+        </form>
+    </div>
+
+  <%-- MM: the box to ADD AN IMAGE --%> 
+    <div class="box">
+      <div class="image-wrap">
+      <form action="<%= configManager.getCreateAlbumUrl() %>"
+             method="post">    
+           <input id="file_to_load" class="input text" name="stream" type="text" value="File name">
+           <input id="comments" class="input text" name="stream" type="text" value="Comments...">
+               <input id="btn-post" class="active btn" type="submit" value="Upload file">
+               <strong> "Add an Image" </strong>
+          </form>
+          </div>
+    </div>
+
+  <%-- MM: the subscribe button --%> 
+      <div class="create">
+      <form action="<%= configManager.getCreateAlbumUrl() %>"
+             method="post">    
+               <input id="btn-post" class="active btn" type="submit" value="Subscribe">
+          </form>
+
+    </div> 
+
 	</div>
 	<!-- /.view -->  
- 	<div class="tabContent" id="searchstream">
-      <div>
+
+
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the SEARCH view --%>
+     <%-- ******************************************************************* --%>
+
+    <div class="tabContent" id="searchstream">
+    <%--MM: should ask for what to search and allow the push of the "Search" button --%>
+      <div class="create">
         <p>SEARCH STREAMS</p>
-      </div>
-    </div>
-    
+          <form action="<%= configManager.getCreateAlbumUrl() %>"
+             method="post">
+               <input id="search-name" class="input text" name="stream" type="text" value="search name here...">
+               <input id="btn-post" class="active btn" type="submit" value="Search">
+          </form>
+     </div>
+    <%-- MM: should appear as a result of the above search up to 5 streams --%>
+    <div>
+
+  </div>
+  </div>
+
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the TRENDING view --%>
+     <%-- ******************************************************************* --%>
+
+
  	<div class="tabContent" id="trendingstream">
-      <div>
-        <p>TRENDING STREAMS</p>
+      <div class="create">
+        <p>TOP 3 TRENDING STREAMS</p>
       </div>
     </div>
+
+     <%-- ******************************************************************* --%>
+     <%-- MCM here starts the div shown if the client chooses the SOCIAL view --%>
+     <%-- ******************************************************************* --%>
+
     
  	<div class="tabContent" id="socialstream">
-      <div>
+      <div class="create">
         <p>SOCIAL STREAMS</p>
       </div>
     </div>

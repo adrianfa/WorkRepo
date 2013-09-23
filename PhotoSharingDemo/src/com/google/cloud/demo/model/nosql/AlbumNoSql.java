@@ -17,6 +17,7 @@ public class AlbumNoSql extends DemoEntityNoSql implements Album {
 	  static final String EMPTY_TITLE = "no title";
 	  static final String FIELD_NAME_SUBSCRIBERS = "subscribers";
 	  static final String FIELD_NAME_TAGS = "tags";
+	  static final String FIELD_NAME_VIEWS = "views";
 	  
 	  public AlbumNoSql(Entity entity) {
 	    super(entity);
@@ -124,4 +125,13 @@ public class AlbumNoSql extends DemoEntityNoSql implements Album {
 	    return (String) entity.getProperty(FIELD_NAME_TAGS);
 	}
 
+ 	@Override
+ 	public void setViews(long views) {
+ 		entity.setProperty(FIELD_NAME_VIEWS, views);
+ 	}
+
+ 	@Override
+ 	public long getViews() {
+ 	    return (Long) entity.getProperty(FIELD_NAME_VIEWS);
+ 	}
 }

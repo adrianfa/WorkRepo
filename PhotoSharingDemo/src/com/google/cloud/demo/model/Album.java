@@ -39,4 +39,7 @@ public interface Album extends DemoEntity {
 
   String getTags();
 
+  void setViews(long views);
+
+  long getViews();
 }

@@ -40,6 +40,7 @@ public class CreateAlbumServlet extends HttpServlet {
           album.setOwnerNickname(ServletUtils.getProtectedUserNickname(currentUser.getNickname()));
           album.setSubscribers(subscribers);
           album.setTags(tags);
+          album.setViews((long)1);          
           album.setUploadTime(System.currentTimeMillis());
         
           albumManager.upsertEntity(album);
