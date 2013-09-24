@@ -52,4 +52,8 @@ public interface Photo extends DemoEntity {
   boolean isActive();
 
   void setActive(boolean active);
+  
+  boolean isAlbumCover();
+
+  void setAlbumCover(boolean active);
 }

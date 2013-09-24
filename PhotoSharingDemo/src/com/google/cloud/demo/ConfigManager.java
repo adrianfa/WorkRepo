@@ -75,6 +75,13 @@ public class ConfigManager {
   }
 
   /**
+   * The album cover picture servlet URL.
+   */
+  public String getAlbumCoverUrl() {
+    return "/cover";
+  }
+
+  /**
    * The create manage URL.
    */
   public String getManageAlbumsUrl() {

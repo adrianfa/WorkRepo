@@ -168,6 +168,31 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
     }
     return null;
   }
+  
+  @Override
+  public Photo toggleCoverPhoto(String userId, long id) {
+    Utils.assertTrue(userId != null, "user id cannot be null");
+    DatastoreService ds = getDatastoreService();
+    Transaction txn = ds.beginTransaction();
+    try {
+      Entity entity = getDatastoreEntity(ds, createPhotoKey(userId, id));
+      if (entity != null) {
+        PhotoNoSql photo = new PhotoNoSql(entity);
+        photo.setAlbumCover(!photo.isAlbumCover());
+        ds.put(entity);
+        txn.commit();
+
+        return photo;
+      }
+    } catch (Exception e) {
+      logger.severe("Failed to delete entity from datastore:" + e.getMessage());
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
+      }
+    }
+    return null;
+  }
 
   @Override
   public void deactivateAlbumPhotos(String userId, long id) {

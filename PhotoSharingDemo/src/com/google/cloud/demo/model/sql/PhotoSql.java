@@ -129,4 +129,14 @@ public class PhotoSql extends DemoEntitySql implements Photo {
   public void setActive(boolean active) {
     this.active = active;
   }
+
+  @Override
+  public boolean isAlbumCover() {
+    return active;
+  }
+
+  @Override
+  public void setAlbumCover(boolean active) {
+    this.active = active;
+  }
 }

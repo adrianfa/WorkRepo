@@ -74,16 +74,63 @@ function init() {
     return vars;
   }
 
-  function pageShow() {
-		//alert("We got a pageShow call!...");  
-		var element = document.getElementById("imm");
-		var color = element.style.visibility;
-		if (color == "visible")
+  function changeURI(key, value) {
+  	key = escape(key); 
+  	value = escape(value);
+  	var kvp = document.location.search.substr(1).split('&');
+  	var i=kvp.length; var x; while(i--) 
+  	{
+      x = kvp[i].split('=');
+      if (x[0]==key)
+      {
+              x[1] = value;
+              kvp[i] = x.join('=');
+              break;
+      }
+  	}
+  	if(i<0) {
+      	kvp[kvp.length] = [key,value].join('=');
+    } else{
+  		//this will reload the page, it's likely better to store this until finished
+  		var loc = kvp.join('&');
+		document.location.search = loc; 
+    }
+
+  }
+  function isAlbumCover(sel, isCover) {
+		var element;
+		if( sel == 1)
+			element = document.getElementById("selectCover1");
+		else if( sel == 2)
+			element = document.getElementById("selectCover2");
+		else if( sel == 3)
+			element = document.getElementById("selectCover3");
+		var show = element.style.visibility;
+		if (isCover)
+			element.style.visibility = "visible";			
+		else
+			element.style.visibility = "hidden";
+}
+
+  function selectCover(sel, url) {
+		//alert("We got a pageShow call!..."); 
+		var element;
+		if( sel == 1)
+			element = document.getElementById("selectCover1");
+		else if( sel == 2)
+			element = document.getElementById("selectCover2");
+		else if( sel == 3)
+			element = document.getElementById("selectCover3");
+		var show = element.style.visibility;
+		if (show == "visible")
 			element.style.visibility = "hidden";			
 		else
 			element.style.visibility = "visible";
-  }
-  
+		var allUrl = "http://"; 
+		allUrl = allUrl.concat(document.location.host);
+		document.location.replace(allUrl.concat(url));
+}
+
   function showTab() {
     var selectedId = getHash( this.getAttribute('href') );
 
@@ -418,7 +465,9 @@ function toggleCommentPost(id, expanded) {
 
       // goes over the pictures, one by one, to be shown to the public
       	int count = 0;
+      	String reloadUrl;
       	for (Photo photo : photos) {
+      		reloadUrl = serviceManager.getAlbumCoverImageUrl(photo);      		
         	String firstClass = "";
         	String lastClass = "";
         	if (count == 0) {
@@ -428,7 +477,8 @@ function toggleCommentPost(id, expanded) {
           		lastClass = "last";
         	}
     	%>
-    		<div class="feed <%= firstClass %> <%= lastClass %>"  onclick="pageShow()">
+    		<div class="feed <%= firstClass %> <%= lastClass %>"  
+    			onclick="selectCover( <%= Integer.toString(count + 1) %>, '<%= reloadUrl%>')">
       			<div class="post group">
         			<div class="image-wrap">
           				<img class="photo-image"
@@ -443,7 +493,9 @@ function toggleCommentPost(id, expanded) {
             				<p class="timestamp"><%= ServletUtils.formatTimestamp(photo.getUploadTime()) %></p>
             				<p>
             				<p><c:out value="<%= photo.getTitle() %>" escapeXml="true"/>
-           					<img class="check" src="img/check.png" id="imm" />         				
+           					<img class="check" src="img/check.png" 
+    							onload="isAlbumCover( <%= Integer.toString(count + 1) %>, <%= photo.isAlbumCover() %>)"
+           						id=<%= ServletUtils.REQUEST_PARAM_NAME_COVER_ID.concat(Integer.toString(count + 1)) %> />         				
           			</div>
        				<!-- /.desc -->
         		</div>
@@ -477,7 +529,22 @@ function toggleCommentPost(id, expanded) {
 
       	int count = 0;
       	for (Album album : albums) {
-	    	  
+      		Photo coverPhoto = null;
+      		String coverPhotoUrl = null;
+          	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId().toString(), album.getId().toString());
+          	try {
+            	for (Photo photo : photoIter) {
+	          		if(photo.isAlbumCover())
+	          			coverPhoto = photo;
+            	}
+          	} catch (DatastoreNeedIndexException e) {
+            	pageContext.forward(configManager.getErrorPageUrl(
+              		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+          	}
+			if(coverPhoto == null)
+				coverPhotoUrl = ServletUtils.getUserIconImageUrl(currentUser.getUserId());
+			else
+				coverPhotoUrl = serviceManager.getImageDownloadUrl(coverPhoto);	    	  
 	%>
      		<div class="feed">
 	      		<div class="post group">
@@ -486,7 +553,7 @@ function toggleCommentPost(id, expanded) {
 				 				album.getId().toString(), 
 				 			 	ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM) %>"> 
 		          		<img class="photo-image"
-		            		src="<%= ServletUtils.getUserIconImageUrl(album.getOwnerId())%>"
+		            		src="<%= coverPhotoUrl%>"
 			 			 	alt="Photo Image" /></a>
 	        		</div>
 		        	<div class="owner group">

@@ -218,6 +218,21 @@ public class PhotoManagerSql extends DemoEntityManagerSql<Photo> implements Phot
       }});
   }
 
+  //MM: TODO implement for real
+  @Override
+  public Photo toggleCoverPhoto(final String userId, final long id) {
+    return runInTransaction(new TransactionalOperation<Photo>() {
+      @Override
+      public Photo execute(Connection conn) throws SQLException {
+        Photo photo = getPhoto(conn, userId, id);
+        if (photo != null && photo.isActive()) {
+          photo.setActive(false);
+          upsertPhoto(conn, photo);
+        }
+        return photo;
+      }});
+  }
+
   @Override
   public void deactivateAlbumPhotos(String userId, long id) {
 	  //MM: TODO actual implementation

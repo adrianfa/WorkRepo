@@ -41,5 +41,5 @@ public interface Album extends DemoEntity {
 
   void setViews(long views);
 
-  long getViews();
+  Long getViews();
 }

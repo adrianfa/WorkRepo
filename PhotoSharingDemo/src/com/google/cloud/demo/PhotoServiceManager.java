@@ -112,15 +112,29 @@ public class PhotoServiceManager {
   }
 
   public String getImageDownloadUrl(Photo photo) {
-    return new StringBuilder(configManager.getDownloadHandlerUrl()).append("?")
-        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
-        .append("=")
-        .append(photo.getId())
-        .append("&")
-        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
-        .append("=")
-        .append(photo.getOwnerId()).toString();
-  }
+	    return new StringBuilder(configManager.getDownloadHandlerUrl()).append("?")
+	        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+	        .append("=")
+	        .append(photo.getId())
+	        .append("&")
+	        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+	        .append("=")
+	        .append(photo.getOwnerId()).toString();
+	  }
+  
+  public String getAlbumCoverImageUrl(Photo photo) {
+	  	StringBuilder builder = new StringBuilder(configManager.getAlbumCoverUrl());
+
+	  	builder.append("?")
+	        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+	        .append("=")
+	        .append(photo.getId())
+	        .append("&")
+	        .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+	        .append("=")
+	        .append(photo.getOwnerId()).toString();
+	    return builder.toString();
+	  }
 
   /**
    * Constructs a redirect url to specific photo. if the photo information is not available, return
@@ -133,36 +147,68 @@ public class PhotoServiceManager {
    * @return the url string to the main page.
    */
   public String getRedirectUrl(String targetUrl, String userId, String id, String albumId, String tabId) {
-    if (targetUrl == null) {
-      targetUrl = configManager.getMainPageUrl();
-    }
-    StringBuilder builder = new StringBuilder(targetUrl);
-    if (userId != null) {
-      builder.append("?")
-          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
-          .append("=")
-          .append(userId);
-    }
-    if(id != null) {
-    	builder.append("&")  	 
-    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
-          .append("=")
-          .append(id);	
-    }
-    if(albumId != null) {
-    	builder.append("&")  	 
-    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
-          .append("=")
-          .append(albumId);	
-    }
-    if (tabId != null) {
-    	builder.append("&")
-    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
-	      .append("=")
-	      .append(tabId);
-    }
-    return builder.toString();
-  }
+	    if (targetUrl == null) {
+	      targetUrl = configManager.getMainPageUrl();
+	    }
+	    StringBuilder builder = new StringBuilder(targetUrl);
+	    if (userId != null) {
+	      builder.append("?")
+	          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+	          .append("=")
+	          .append(userId);
+	    }
+	    if(id != null) {
+	    	builder.append("&")  	 
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+	          .append("=")
+	          .append(id);	
+	    }
+	    if(albumId != null) {
+	    	builder.append("&")  	 
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+	          .append("=")
+	          .append(albumId);	
+	    }
+	    if (tabId != null) {
+	    	builder.append("&")
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+		      .append("=")
+		      .append(tabId);
+	    }
+	    return builder.toString();
+	  }
+
+  public String getViewAlbumUrl(String targetUrl, String userId, String id, String albumId, String tabId) {
+	    if (targetUrl == null) {
+	      targetUrl = configManager.getMainPageUrl();
+	    }
+	    StringBuilder builder = new StringBuilder(targetUrl);
+	    if (userId != null) {
+	      builder.append("?")
+	          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+	          .append("=")
+	          .append(userId);
+	    }
+	    if(id != null) {
+	    	builder.append("&")  	 
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+	          .append("=")
+	          .append(id);	
+	    }
+	    if(albumId != null) {
+	    	builder.append("&")  	 
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+	          .append("=")
+	          .append(albumId);	
+	    }
+	    if (tabId != null) {
+	    	builder.append("&")
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+		      .append("=")
+		      .append(tabId);
+	    }
+	    return builder.toString();
+	  }
 
   public void cleanDeatctivedPhotos() {
     Iterable<Photo> photos = photoManager.getDeactivedPhotos();

@@ -86,6 +86,13 @@ public interface PhotoManager extends DemoEntityManager<Photo> {
    */
   Photo deactivePhoto(String userId, long id);
 
+  /**
+   * Marks a photo inactive so that the photo is ready for delete.
+   *
+   * @return the deactived photo object; null if operation failed.
+   */
+  Photo toggleCoverPhoto(String userId, long id);
+
 /**
  * Marks a album photos inactive so that the photo is ready for delete.
  *

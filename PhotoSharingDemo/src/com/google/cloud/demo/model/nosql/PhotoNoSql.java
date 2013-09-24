@@ -34,6 +34,7 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   static final String FIELD_NAME_ACTIVE = "active";
   static final String EMPTY_TITLE = "no title";
   static final String FIELD_NAME_ALBUM_ID = "albumId";
+  static final String FIELD_NAME_ALBUM_COVER = "albumCover";
 
 
   public PhotoNoSql(Entity entity) {
@@ -43,6 +44,7 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   public PhotoNoSql(Key parentKey, String kind) {
     super(parentKey, kind);
     setActive(true);
+    setAlbumCover(false);
     entity.setProperty(FIELD_NAME_OWNER_ID, parentKey.getName());
   }
 
@@ -131,5 +133,17 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   @Override
   public void setActive(boolean active) {
     entity.setProperty(FIELD_NAME_ACTIVE, active);
+  }
+  
+  @Override
+  public boolean isAlbumCover() {
+    Boolean active = (Boolean) entity.getProperty(FIELD_NAME_ALBUM_COVER);
+    // By default, if not set true, a photo is not a cover.
+    return active != null && active;
+  }
+
+  @Override
+  public void setAlbumCover(boolean active) {
+    entity.setProperty(FIELD_NAME_ALBUM_COVER, active);
   }
 }

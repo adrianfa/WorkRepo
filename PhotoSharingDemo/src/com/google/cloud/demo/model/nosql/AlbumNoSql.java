@@ -131,7 +131,7 @@ public class AlbumNoSql extends DemoEntityNoSql implements Album {
  	}
 
  	@Override
- 	public long getViews() {
+ 	public Long getViews() {
  	    return (Long) entity.getProperty(FIELD_NAME_VIEWS);
  	}
 }
