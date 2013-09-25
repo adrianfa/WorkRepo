@@ -36,6 +36,7 @@ public class AlbumCoverServlet extends HttpServlet {
 	        		String otherId = other_photo.getId().toString();
 	          		if(other_photo.isAlbumCover() && (otherId.compareTo(id) != 0))
 	          			photoManager.toggleCoverPhoto(user, other_photo.getId());
+	          		
 	        	}
 	    		photoManager.toggleCoverPhoto(user, photoId);
 	      	} catch (DatastoreNeedIndexException e) {
@@ -46,8 +47,9 @@ public class AlbumCoverServlet extends HttpServlet {
 	      builder.append("Bad parameters");
 	    }
 	    if (succeeded) {
-	      res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-	              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), user, id, albumId, "viewstream"));
+	    	String target = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL);
+	    	PhotoServiceManager serviceManager = appContext.getPhotoServiceManager();
+	    	res.sendRedirect(serviceManager.getRedirectUrl(target, user, id, albumId, "viewstream", null));
 	    } else {
 	      res.sendError(400, builder.toString());
 	    }

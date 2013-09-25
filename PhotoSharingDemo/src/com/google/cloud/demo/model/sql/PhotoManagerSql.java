@@ -14,9 +14,14 @@
 package com.google.cloud.demo.model.sql;
 
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.demo.ConfigManager;
 import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.PhotoManager;
+import com.google.cloud.demo.model.nosql.PhotoNoSql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -265,4 +270,20 @@ public class PhotoManagerSql extends DemoEntityManagerSql<Photo> implements Phot
       return photo;
     }
   }
+  
+  @Override
+  public Iterable<Photo> getSubsetOwnedAlbumPhotos(final String userId, String albumId, int how_many,int offset) {
+	    return runInTransaction(new TransactionalOperation<List<Photo>>() {
+	        @Override
+	        public List<Photo> execute(Connection conn) throws SQLException {
+	          return queryEntities(conn, SQL_SELECT_ALL_SHARED_PHOTOS, new PhotoSelectQueryCallback() {
+	            @Override
+	            public void prepareStatement(PreparedStatement stmt) throws SQLException {
+	              stmt.setString(1, userId);
+	            }
+	          });
+	        }
+	      });
+  }
+
 }
