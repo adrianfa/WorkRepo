@@ -440,10 +440,11 @@ function toggleCommentPost(id, expanded) {
         		<!-- /.account -->
         		<a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Choose an image</a>
         		<div id="upload-form" style="display:none">
-          			<form action="<%= serviceManager.getUploadUrl() + "?stream-id=" + streamId %>" method="post" 
+          			<form action="<%= serviceManager.getUploadUrl() /* + "?stream-id=" + streamId*/ %>" method="post" 
             			enctype="multipart/form-data">
             			<input id="input-file" class="inactive file btn" type="file" name="photo"
               				onchange="onFileSelected()">
+              			<input type="hidden" name="stream-id" value="<%= streamId%>">
             			<textarea name="title" placeholder="Write a description"></textarea>
             			<input id="btn-post" class="active btn" type="submit" value="Post">
             			<a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
@@ -674,7 +675,6 @@ function toggleCommentPost(id, expanded) {
       }
       albId = leaderboardManager.getLeaderboardEntry("EntryB").getAlbumId();
       usrId = leaderboardManager.getLeaderboardEntry("EntryB").getUserId();
-      albm = albumManager.getAlbum(usrId, albId.longValue());
       if(albId != 0 && usrId != null) {
         	albm = albumManager.getAlbum(usrId, albId.longValue());
         	if(albm != null)
@@ -682,7 +682,6 @@ function toggleCommentPost(id, expanded) {
         }
       albId = leaderboardManager.getLeaderboardEntry("EntryC").getAlbumId();
       usrId = leaderboardManager.getLeaderboardEntry("EntryC").getUserId();
-      albm = albumManager.getAlbum(usrId, albId.longValue());
       if(albId != 0 && usrId != null) {
         	albm = albumManager.getAlbum(usrId, albId.longValue());
         	if(albm != null)

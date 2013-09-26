@@ -60,9 +60,30 @@ public class PhotoServiceManager {
     } else {
       uploadOptions = UploadOptions.Builder.withGoogleStorageBucketName(bucket);
     }
-    return blobstoreService.createUploadUrl(configManager.getUploadHandlerUrl(), uploadOptions);
+    String createdUrl = blobstoreService.createUploadUrl(configManager.getUploadHandlerUrl(), uploadOptions);
+    String retUrl = StripUrlFromParameters(createdUrl);
+    return createdUrl;
   }
 
+  private String StripUrlFromParameters(String createdUrl)
+  {
+	  //createdUrl = "http://balaurbun2013.appspot.com/_ah/upload/?user=118090058030877094640&stream-id=5118776383111168&tabId=viewstream/AMmfu6ZKQwzrU5ADi7hJe-nef6TBKXeqKObGNOlHySg0gZFRJj63WuFj-tYbktYtwqdZbLnaZcbAC6dRVWUtbnfeXx_XRslsqfgKM4lMXymCxKbZBk5yNgOKNLRRAbcl7UJ06je4zOAA/ALBNUaYAAAAAUkQcfuvOOrmVEyMcLWgOhqpdE-XXW0QF/";
+	  String retUrl = null;
+	  int mark = createdUrl.lastIndexOf('?');
+	  if(mark == -1)
+		  retUrl = createdUrl;
+	  else {
+		  int slash = createdUrl.indexOf('/', mark);
+		  if(slash != -1) {
+			  int end = createdUrl.length() - 1;
+			  String blob_part = createdUrl.substring(slash+1, end);
+			  String hostUrl = createdUrl.substring(0, mark);
+			  retUrl = hostUrl.concat(blob_part);
+		  }
+	  }
+	  return retUrl;
+  }
+  
   public String getThumbnailUrl(BlobKey blobKey) {
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
     options.imageSize(configManager.getPhotoThumbnailSizeInPixels());

@@ -42,7 +42,8 @@ public class UploadHandlerServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-    AppContext appContext = AppContext.getAppContext();
+	    //res.sendError(401, "Arrived at this point.");
+   AppContext appContext = AppContext.getAppContext();
     DemoUser user = appContext.getCurrentUser();
     if (user == null) {
       res.sendError(401, "You have to login to upload image.");
@@ -86,6 +87,8 @@ public class UploadHandlerServlet extends HttpServlet {
       photo = photoManager.upsertEntity(photo);
       id = photo.getId().toString();
       succeeded = true;
+      //res.sendError(400, "Upload Handler successful.");
+
     }
     if (succeeded) {
       res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
