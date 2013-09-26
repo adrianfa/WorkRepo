@@ -101,8 +101,8 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
   }
   
   @Override
-  public Iterable<Photo> getSubsetOwnedAlbumPhotos(String userId, String albumId, int how_many, int offset) {
-    Query query = new Query(getKind()).addSort(PhotoNoSql.FIELD_NAME_UPLOAD_TIME, SortDirection.ASCENDING);
+  public Iterable<Photo> getSubsetOwnedAlbumPhotos(String userId, String albumId, int how_many,int offset) {
+    Query query = new Query(getKind()).addSort(PhotoNoSql.FIELD_NAME_UPLOAD_TIME, SortDirection.DESCENDING);
     query.setAncestor(userManager.createDemoUserKey(userId));
     Query.Filter filterActive = new Query.FilterPredicate(PhotoNoSql.FIELD_NAME_ACTIVE,
             FilterOperator.EQUAL, true);
@@ -216,4 +216,22 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
     	  deactivePhoto(userId, photo.getId());
       }
   }
+
+  
+  @Override
+	public String getAlbumSize(String userId, String albumId) {
+	  Iterable<Photo> photoIter = getOwnedAlbumPhotos(userId, albumId);
+	  int count=0; for (Photo photo : photoIter) {	count++; }
+	  return String.valueOf(count);
+	}
+  
+  @Override
+	public long getNewestPhotoTimestamp(String userId, String albumId) {
+	  Iterable<Photo> photoIter = getSubsetOwnedAlbumPhotos(userId, albumId, 1, 0);
+	  Photo first_one = null;
+	  for (Photo photo : photoIter) {  first_one = photo; break;}
+      if (first_one != null) return first_one.getUploadTime();
+      return 0; 
+    
+    }
 }
