@@ -14,15 +14,9 @@
 package com.google.cloud.demo.model.sql;
 
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.demo.ConfigManager;
 import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.PhotoManager;
-import com.google.cloud.demo.model.nosql.PhotoNoSql;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

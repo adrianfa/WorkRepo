@@ -46,6 +46,16 @@
     <servlet-class>com.google.cloud.demo.CleanupCronServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>TrendingCronServlet</servlet-name>
+    <servlet-class>com.google.cloud.demo.TrendingCronServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>TrendingCronServlet</servlet-name>
+    <url-pattern>/cron/trending</url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>CleanUpServlet</servlet-name>
     <url-pattern>/cron/clean</url-pattern>

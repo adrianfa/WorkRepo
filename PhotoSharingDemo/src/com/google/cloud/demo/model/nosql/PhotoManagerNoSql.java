@@ -30,7 +30,6 @@ import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.PhotoManager;
 import com.google.cloud.demo.model.Utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -102,7 +101,7 @@ public class PhotoManagerNoSql extends DemoEntityManagerNoSql<Photo> implements 
   }
   
   @Override
-  public Iterable<Photo> getSubsetOwnedAlbumPhotos(String userId, String albumId, int how_many,int offset) {
+  public Iterable<Photo> getSubsetOwnedAlbumPhotos(String userId, String albumId, int how_many, int offset) {
     Query query = new Query(getKind()).addSort(PhotoNoSql.FIELD_NAME_UPLOAD_TIME, SortDirection.ASCENDING);
     query.setAncestor(userManager.createDemoUserKey(userId));
     Query.Filter filterActive = new Query.FilterPredicate(PhotoNoSql.FIELD_NAME_ACTIVE,

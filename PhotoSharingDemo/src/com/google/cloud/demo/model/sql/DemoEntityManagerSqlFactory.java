@@ -21,7 +21,9 @@ import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoEntityManagerFactory;
 import com.google.cloud.demo.model.DemoModelException;
 import com.google.cloud.demo.model.DemoUserManager;
+import com.google.cloud.demo.model.LeaderboardManager;
 import com.google.cloud.demo.model.PhotoManager;
+import com.google.cloud.demo.model.ViewManager;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -40,6 +42,7 @@ public class DemoEntityManagerSqlFactory implements DemoEntityManagerFactory {
   private PhotoManager photoManager;
   private CommentManager commentManager;
   private AlbumManager albumManager;
+  private ViewManager viewManager;
 
   @Override
   public void init(ConfigManager configManager) {
@@ -48,6 +51,7 @@ public class DemoEntityManagerSqlFactory implements DemoEntityManagerFactory {
       demoUserManager = new DemoUserManagerSql(configManager);
       photoManager = new PhotoManagerSql(configManager);
       commentManager = new CommentManagerSql(configManager);
+      //viewManager = new ViewManagerSql(viewManager);
     } catch (SQLException e) {
       logger.severe("Failed to register Cloud SQL driver: " + e.getMessage());
       throw new DemoModelException("Failed to register Cloud SQL driver", e);
@@ -70,8 +74,19 @@ public class DemoEntityManagerSqlFactory implements DemoEntityManagerFactory {
   }
 
   @Override
+  public ViewManager getViewManager() {
+    return viewManager;
+  }
+
+  @Override
   public DemoUserManager getDemoUserManager() {
     return demoUserManager;
   }
+
+@Override
+public LeaderboardManager getLeaderboardManager() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

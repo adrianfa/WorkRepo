@@ -19,7 +19,9 @@ import com.google.cloud.demo.model.AlbumManager;
 import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoEntityManagerFactory;
 import com.google.cloud.demo.model.DemoUserManager;
+import com.google.cloud.demo.model.LeaderboardManager;
 import com.google.cloud.demo.model.PhotoManager;
+import com.google.cloud.demo.model.ViewManager;
 
 /**
  * Entity manager factory implementation for NoSQL.
@@ -31,6 +33,8 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
   private PhotoManagerNoSql photoManager;
   private CommentManagerNoSql commentManager;
   private AlbumManagerNoSql albumManager;
+  private ViewManagerNoSql viewManager;
+  private LeaderboardManagerNoSql leaderboardManager;
   private boolean initialized;
 
   @Override
@@ -49,6 +53,16 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
   }
 
   @Override
+  public ViewManager getViewManager() {
+    return viewManager;
+  }
+
+  @Override
+  public LeaderboardManager getLeaderboardManager() {
+      return leaderboardManager;
+  }
+  
+  @Override
   public DemoUserManager getDemoUserManager() {
     return demoUserManager;
   }
@@ -61,9 +75,12 @@ public class DemoEntityManagerNoSqlFactory implements DemoEntityManagerFactory {
       photoManager = new PhotoManagerNoSql(demoUserManager);
       commentManager = new CommentManagerNoSql(demoUserManager);
       albumManager = new AlbumManagerNoSql(demoUserManager, photoManager);
+      viewManager = new ViewManagerNoSql(albumManager);
+      leaderboardManager = new LeaderboardManagerNoSql();
       initialized = true;
     } else {
       throw new IllegalStateException("Should not initialize the factory more than once.");
     }
   }
+
 }

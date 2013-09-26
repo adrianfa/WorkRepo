@@ -13,6 +13,11 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 
 public class DataStoreViewer extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	    String entityParam = req.getParameter("e");
 

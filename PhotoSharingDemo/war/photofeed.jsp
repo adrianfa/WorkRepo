@@ -16,6 +16,8 @@
   PhotoManager photoManager = appContext.getPhotoManager();
   CommentManager commentManager = appContext.getCommentManager();
   AlbumManager albumManager = appContext.getAlbumManager();
+  ViewManager viewManager = appContext.getViewManager();
+  LeaderboardManager leaderboardManager = appContext.getLeaderboardManager();
 %>
 <!DOCTYPE html>
 
@@ -327,7 +329,7 @@ function toggleCommentPost(id, expanded) {
                          </tr>
 
                     <%
-                      Iterable<Album> sub_albumsIter = albumManager.getOwnedAlbums(currentUser.getUserId());
+                      Iterable<Album> sub_albumsIter = albumManager.getOwnedAlbums(currentUser.getUserId());  //change here to subscribed albums
                       ArrayList<Album> sub_albums = new ArrayList<Album>();
                       try {
                         for (Album sub_album : sub_albumsIter) {
@@ -403,6 +405,7 @@ function toggleCommentPost(id, expanded) {
 	if(streamId != null && !streamId.isEmpty())
 	{
 		String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
+		viewManager.addAlbumView(streamId);
 	%>
 		<div class="page-title">
 		<%
@@ -455,7 +458,7 @@ function toggleCommentPost(id, expanded) {
     	<!-- KK -->
     	<%
       	//Iterable<Photo> photoIter = photoManager.getActivePhotos();
-      	Iterable<Photo> photoIter = photoManager.getSubsetOwnedAlbumPhotos(currentUser.getUserId(), streamId, 3, start_with_photo-1);
+      	Iterable<Photo> photoIter = photoManager.getSubsetOwnedAlbumPhotos(streamUserId, streamId, 3, start_with_photo-1);
       	ArrayList<Photo> photos = new ArrayList<Photo>();
       	int count=0;
       	try {
@@ -525,7 +528,7 @@ function toggleCommentPost(id, expanded) {
     %>
       	<%-- MM:the More pictures button after the 3 shown pictures --%>
         <div class="next-3-pict">
-        	<form action="<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null, 
+        	<form action="<%= serviceManager.getRedirectUrl(null, streamUserId, null, 
 		 			                                       albm.getId().toString(), 
 		 			                                       ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, String.valueOf(start_with_photo+3))
 		 			 %>"
@@ -574,7 +577,7 @@ function toggleCommentPost(id, expanded) {
       	for (Album album : albums) {
       		Photo coverPhoto = null;
       		String coverPhotoUrl = null;
-          	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId().toString(), album.getId().toString());
+          	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId(), album.getId().toString());
           	try {
             	for (Photo photo : photoIter) {
 	          		if(photo.isAlbumCover())
@@ -585,14 +588,14 @@ function toggleCommentPost(id, expanded) {
               		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
           	}
 			if(coverPhoto == null)
-				coverPhotoUrl = ServletUtils.getUserIconImageUrl(currentUser.getUserId());
+				coverPhotoUrl = ServletUtils.getUserIconImageUrl(album.getOwnerId());
 			else
 				coverPhotoUrl = serviceManager.getImageDownloadUrl(coverPhoto);	    	  
 	%>
      		<div class="feed">
 	      		<div class="post group">
 		        	<div class="image-wrap">
-		        		<a href="<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null, 
+		        		<a href="<%= serviceManager.getRedirectUrl(null, album.getOwnerId(), null, 
 				 				album.getId().toString(), 
 				 			 	ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, null) %>"> 
 		          		<img class="photo-image"
@@ -656,6 +659,84 @@ function toggleCommentPost(id, expanded) {
       <div class="create">
         <p>TOP 3 TRENDING STREAMS</p>
       </div>
+      <%
+      //boolean ff = false;
+      //if(ff)
+      {
+      albums = new ArrayList<Album>();
+      Album albm = null;
+      Long albId = leaderboardManager.getLeaderboardEntry("EntryA").getAlbumId();
+      String usrId = leaderboardManager.getLeaderboardEntry("EntryA").getUserId();
+      if(albId != 0 && usrId != null) {
+      	albm = albumManager.getAlbum(usrId, albId.longValue());
+      	if(albm != null)
+      		albums.add(albm);
+      }
+      albId = leaderboardManager.getLeaderboardEntry("EntryB").getAlbumId();
+      usrId = leaderboardManager.getLeaderboardEntry("EntryB").getUserId();
+      albm = albumManager.getAlbum(usrId, albId.longValue());
+      if(albId != 0 && usrId != null) {
+        	albm = albumManager.getAlbum(usrId, albId.longValue());
+        	if(albm != null)
+        		albums.add(albm);
+        }
+      albId = leaderboardManager.getLeaderboardEntry("EntryC").getAlbumId();
+      usrId = leaderboardManager.getLeaderboardEntry("EntryC").getUserId();
+      albm = albumManager.getAlbum(usrId, albId.longValue());
+      if(albId != 0 && usrId != null) {
+        	albm = albumManager.getAlbum(usrId, albId.longValue());
+        	if(albm != null)
+        		albums.add(albm);
+        }
+	
+	  int count = 0;
+   	  for (Album album : albums) {
+		Photo coverPhoto = null;
+	   	String coverPhotoUrl = null;
+	    Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId(), album.getId().toString());
+	    try {
+	       	for (Photo photo : photoIter) {
+	       		if(photo.isAlbumCover())
+	        			coverPhoto = photo;
+	       	}
+	    } catch (DatastoreNeedIndexException e) {
+	         	pageContext.forward(configManager.getErrorPageUrl(
+	           		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+	    }
+		if(coverPhoto == null)
+			coverPhotoUrl = ServletUtils.getUserIconImageUrl(album.getOwnerId());
+		else
+			coverPhotoUrl = serviceManager.getImageDownloadUrl(coverPhoto);	    	  
+		%>
+     		<div class="feed">
+	      		<div class="post group">
+		        	<div class="image-wrap">
+		        		<a href="<%= serviceManager.getRedirectUrl(null, album.getOwnerId(), null, 
+				 				album.getId().toString(), 
+				 			 	ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, null) %>"> 
+		          		<img class="photo-image"
+		            		src="<%= coverPhotoUrl%>"
+			 			 	alt="Photo Image" /></a>
+	        		</div>
+		        	<div class="owner group">
+		          		<div class="desc">
+		            		<h3><%= ServletUtils.getProtectedUserNickname(album.getOwnerNickname()) %></h3>	            
+		            		<p class="timestamp"><%= ServletUtils.formatTimestamp(album.getUploadTime()) %></p>
+		            		<p>
+		            		<p><c:out value="<%= album.getTitle() %>" escapeXml="true"/>
+		          		</div>
+		          		<!-- /.desc -->
+        			</div>
+		        	<!-- /.usr -->
+	      		</div>
+	      		<!-- /.post -->
+   			</div>
+    		<!-- /.feed -->
+	<%	
+			count++;
+      	}
+      }
+    %>
     </div>
 
      <%-- ******************************************************************* --%>

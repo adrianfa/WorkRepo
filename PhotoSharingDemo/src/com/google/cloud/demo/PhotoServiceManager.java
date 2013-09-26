@@ -185,7 +185,7 @@ public class PhotoServiceManager {
     return builder.toString();
   }
 
-  public void cleanDeatctivedPhotos() {
+  public void cleanDeactivedPhotos() {
     Iterable<Photo> photos = photoManager.getDeactivedPhotos();
     if (photos != null) {
       for (Photo photo : photos) {

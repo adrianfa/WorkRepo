@@ -51,6 +51,20 @@ public interface DemoEntityManagerFactory {
   AlbumManager getAlbumManager();
 
   /**
+   * Gets the comment manager.
+   *
+   * @return the comment manager object.
+   */
+  ViewManager getViewManager();
+
+  /**
+   * Gets the comment manager.
+   *
+   * @return the comment manager object.
+   */
+  LeaderboardManager getLeaderboardManager();
+
+  /**
    * Gets the demo user manager.
    *
    * @return the demo user manager object.

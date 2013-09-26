@@ -18,15 +18,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.cloud.demo.model.Album;
+import com.google.cloud.demo.model.AlbumManager;
+
 /**
  * Clean up deleted photos.
  *
  * @author Michael Tang (ntang@google.com)
  */
 public class CleanupCronServlet extends HttpServlet {
-  @Override
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+@Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
     PhotoServiceManager manager = AppContext.getAppContext().getPhotoServiceManager();
-    manager.cleanDeatctivedPhotos();
+    AlbumManager albumManager = AppContext.getAppContext().getAlbumManager();
+    manager.cleanDeactivedPhotos();
+    Iterable<Album> albums = albumManager.getDeactivedAlbums();
+    if (albums != null) {
+      for (Album album : albums) {
+    	  albumManager.deleteEntity(album);
+      }
+    }
+
   }
 }

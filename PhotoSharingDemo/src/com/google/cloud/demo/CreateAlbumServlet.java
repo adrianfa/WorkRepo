@@ -8,11 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.cloud.demo.model.Album;
 import com.google.cloud.demo.model.AlbumManager;
-import com.google.cloud.demo.model.Comment;
-import com.google.cloud.demo.model.CommentManager;
 import com.google.cloud.demo.model.DemoUser;
-import com.google.cloud.demo.model.Photo;
-import com.google.cloud.demo.model.PhotoManager;
 
 public class CreateAlbumServlet extends HttpServlet {
 	
@@ -28,7 +24,7 @@ public class CreateAlbumServlet extends HttpServlet {
     String content = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_STREAM);
     String subscribers = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_SUBSCRIBERS);
     String tags = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TAGS);
-    String coverImageUrl = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_COVER_IMAGE_URL);
+    //String coverImageUrl = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_COVER_IMAGE_URL);
     boolean succeeded = false;
     StringBuilder builder = new StringBuilder();
     if (currentUser != null && content != null) {

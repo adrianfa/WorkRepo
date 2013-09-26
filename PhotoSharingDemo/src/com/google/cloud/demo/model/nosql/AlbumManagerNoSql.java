@@ -15,7 +15,6 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.demo.model.Album;
 import com.google.cloud.demo.model.AlbumManager;
-import com.google.cloud.demo.model.Photo;
 import com.google.cloud.demo.model.Utils;
 
 public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	AlbumManager {
@@ -45,12 +44,6 @@ public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	
 	  }
 	  
 	@Override
-	public Album deleteEntity(Album entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Album getAlbum(String userId, long id) {
 	    Key key = createAlbumKey(userId, id);
 	    return getEntity(key);
@@ -64,6 +57,10 @@ public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	
 	    } else {
 	      return KeyFactory.createKey(getKind(), id);
 	    }
+	}
+
+	public Key createAlbumKey(String albumId) {
+		return KeyFactory.createKey(getKind(), albumId);
 	}
 
 	@Override
@@ -85,8 +82,12 @@ public class AlbumManagerNoSql extends DemoEntityManagerNoSql<Album> implements	
 
 	@Override
 	public Iterable<Album> getDeactivedAlbums() {
-		// TODO Auto-generated method stub
-		return null;
+	    Query query = new Query(getKind());
+	    Query.Filter filter = new Query.FilterPredicate(AlbumNoSql.FIELD_NAME_ACTIVE,
+	        FilterOperator.EQUAL, false);
+	    query.setFilter(filter);
+	    FetchOptions options = FetchOptions.Builder.withDefaults();
+	    return queryEntities(query, options);
 	}
 
 	@Override

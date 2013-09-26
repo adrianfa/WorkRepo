@@ -5,4 +5,9 @@
     <description>Clean up deleted photos</description>
     <schedule>every 5 minutes</schedule>
   </cron>
+  <cron>
+    <url>/cron/trending</url>
+    <description>Compute top trending streams</description>
+    <schedule>every 5 minutes</schedule>
+  </cron>
 </cronentries>
