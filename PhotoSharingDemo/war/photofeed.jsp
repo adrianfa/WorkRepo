@@ -603,44 +603,44 @@ function toggleCommentPost(id, expanded) {
           </div>
           <% 
           String search_text = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_SEARCH_TXT);
-          if (search_text != null) {
-    		  
-    albumIter = albumManager.getActiveAlbums();
-  	albums = new ArrayList<Album>();
-  	try {
-    	for (Album album : albumIter) {
-        	if ((album.getTitle()).indexOf(search_text) != -1) albums.add(album);
-        }
-  	} catch (DatastoreNeedIndexException e) {
-        pageContext.forward(configManager.getErrorPageUrl(
-          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
-  	} 
-  	
-  	}   int count = 0;
-      	for (Album album : albums) {
-      		Photo coverPhoto = null;
-      		String coverPhotoUrl = null;
-          	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId().toString(), album.getId().toString());
-          	try {
-            	for (Photo photo : photoIter) {
-	          		if(photo.isAlbumCover())
-	          			coverPhoto = photo;
-            	}
-          	} catch (DatastoreNeedIndexException e) {
-            	pageContext.forward(configManager.getErrorPageUrl(
-              		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
-          	}
-			if(coverPhoto == null)
-				coverPhotoUrl = ServletUtils.getUserIconImageUrl(album.getOwnerId());
-			else
-				coverPhotoUrl = serviceManager.getImageDownloadUrl(coverPhoto);	    	  
+          if (search_text != null) {   		  
+  				albumIter = albumManager.getActiveAlbums();
+  				albums = new ArrayList<Album>();
+  				try {
+    				for (Album album : albumIter) {
+        				if ((album.getTitle()).indexOf(search_text) != -1) albums.add(album);
+        			}
+  				} catch (DatastoreNeedIndexException e) {
+        			pageContext.forward(configManager.getErrorPageUrl(
+         			 ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+  				}   	
+  			}	
+          if (search_text != null) {   		  
+          	int count = 0;
+	      	for (Album album : albums) {
+	      		Photo coverPhoto = null;
+	      		String coverPhotoUrl = null;
+	          	Iterable<Photo> photoIter = photoManager.getOwnedAlbumPhotos(album.getOwnerId().toString(), album.getId().toString());
+	          	try {
+	            	for (Photo photo : photoIter) {
+		          		if(photo.isAlbumCover())
+		          			coverPhoto = photo;
+	            	}
+	          	} catch (DatastoreNeedIndexException e) {
+	            	pageContext.forward(configManager.getErrorPageUrl(
+	              		ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
+	          	}
+				if(coverPhoto == null)
+					coverPhotoUrl = ServletUtils.getUserIconImageUrl(album.getOwnerId());
+				else
+					coverPhotoUrl = serviceManager.getImageDownloadUrl(coverPhoto);	    	  
 	%>
       		<div class="feed">
 	      		<div class="post group">
 		        	<div class="image-wrap">
 		        		<a href="<%= serviceManager.getRedirectUrl(null, album.getOwnerId(), null, 
 				 				album.getId().toString(), 
-				 			 	ServletUtils.REQUEST_PARAM_NAME_SEARCH_STREAM, null) %>"> 
+				 			 	ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, null) %>"> 
 		          		<img class="photo-image"
 		            		src="<%= coverPhotoUrl%>"
 			 			 	alt="Photo Image" /></a>
@@ -656,9 +656,10 @@ function toggleCommentPost(id, expanded) {
 	      		</div>
    			</div>
 	<%	
-	count++;
-	if (count ==2) break;
-      	}
+				count++;
+				if (count ==2) break;
+      		}
+          }
     %>
      </div>
     <%-- MM: should appear as a result of the above search up to 5 streams --%>
@@ -704,7 +705,7 @@ function toggleCommentPost(id, expanded) {
         		albums.add(albm);
         }
 	
-	  count = 0;
+	  int count = 0;
    	  for (Album album : albums) {
 		Photo coverPhoto = null;
 	   	String coverPhotoUrl = null;
@@ -754,22 +755,21 @@ function toggleCommentPost(id, expanded) {
       }
     %>
        	<div class = box >	
-      		<tr>
-      		    
-                    <td><input type="radio" name="course" value="no_reports">No reports</td><p></p>
-                    <td><input type="radio" name="course" value="five_min">Every 5 minutes</td><p></p>
-                    <td><input type="radio" name="course" value="one_hour">Every 1 hour </td><p></p>
-                    <td><input type="radio" name="course" value="every_day">Every day </td><p></p>
-      		</tr>
   		</div>
         <div class="next-3-pict">
                  <%-- MCM: replace action form with update rate --%>
-                 <tr> Email trending report </tr>
-        	     <form action="<%= configManager.getCreateAlbumUrl() %>"
-                   method="post">    
-                   <input id="btn-post" class="active btn" type="submit" value="Update Rate">
-                 </form>
-        </div>
+        	<form action="<%= configManager.getCreateAlbumUrl() %>"
+              method="post">    
+      		<tr>   		    
+                 <td><input type="radio" name="course" value="no_reports">No reports</td><p></p>
+                 <td><input type="radio" name="course" value="five_min">Every 5 minutes</td><p></p>
+                 <td><input type="radio" name="course" value="one_hour">Every 1 hour </td><p></p>
+                 <td><input type="radio" name="course" value="every_day">Every day </td><p></p>
+     		</tr>
+            <tr> Email trending report </tr>
+              <input id="btn-post" class="active btn" type="submit" value="Update Rate">
+            </form>
+       </div>
      
     		<!-- /.feed -->
  
