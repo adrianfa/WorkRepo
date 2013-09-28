@@ -1,4 +1,25 @@
-<!-- Indices written at Fri, 20 Sep 2013 16:26:54 CDT -->
+<!-- Indices written at Fri, 27 Sep 2013 23:51:54 CDT -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 23 times in query history -->
+    <datastore-index kind="Photo" ancestor="true" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="albumId" direction="asc"/>
+        <property name="uploadTime" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 17 times in query history -->
+    <datastore-index kind="Album" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="createTime" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 15 times in query history -->
+    <datastore-index kind="View" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="albumId" direction="asc"/>
+        <property name="viewTime" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

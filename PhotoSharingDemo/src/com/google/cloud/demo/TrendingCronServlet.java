@@ -51,6 +51,7 @@ public class TrendingCronServlet extends HttpServlet {
     		for (View view : albumViews) {
     			viewCount++;
     		}
+    		album.setViews(viewCount);
     		if(Long.valueOf(viewCount).compareTo(Long.valueOf(entryC_views)) > 0 ) {
         		if(Long.valueOf(viewCount).compareTo(Long.valueOf(entryB_views)) > 0 ) {
             		if(Long.valueOf(viewCount).compareTo(Long.valueOf(entryA_views)) > 0 ) {           		    

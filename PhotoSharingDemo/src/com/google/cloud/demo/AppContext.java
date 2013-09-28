@@ -22,6 +22,7 @@ import com.google.cloud.demo.model.DemoUser;
 import com.google.cloud.demo.model.DemoUserManager;
 import com.google.cloud.demo.model.LeaderboardManager;
 import com.google.cloud.demo.model.PhotoManager;
+import com.google.cloud.demo.model.SubscriptionManager;
 import com.google.cloud.demo.model.ViewManager;
 
 import java.util.logging.Logger;
@@ -93,6 +94,10 @@ public class AppContext {
 
   public LeaderboardManager getLeaderboardManager() {
 	    return entityManagerFactory.getLeaderboardManager();
+	  }
+
+  public SubscriptionManager getSubscriptionManager() {
+	    return entityManagerFactory.getSubscriptionManager();
 	  }
 
   public ConfigManager getConfigManager() {

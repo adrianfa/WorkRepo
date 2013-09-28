@@ -82,6 +82,13 @@ public class ConfigManager {
   }
 
   /**
+   * The set cron time servlet URL.
+   */
+  public String getSetCronTimeUrl() {
+    return "/rate";
+  }
+
+  /**
    * The album cover picture servlet URL.
    */
   public String getAlbumCoverUrl() {

@@ -205,7 +205,57 @@ public class PhotoServiceManager {
     }
     return builder.toString();
   }
-  public String getRedirectUrl1(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos, String search_text) {
+  
+  /**
+   * Constructs a redirect url to specific photo. if the photo information is not available, return
+   * to the main page.
+   *
+   * @param targetUrl target url. If null,
+   * @param userId the photo owner id
+   * @param id the photo id.
+   * @param next_three_photos starting with which three pictures to show now
+   *
+   * @return the url string to the main page.
+   */
+  public String getSubscribeUrl(String targetUrl, String userId, String id, String albumId, String tabId, String subscribe) {
+    if (targetUrl == null) {
+      targetUrl = configManager.getMainPageUrl();
+    }
+    StringBuilder builder = new StringBuilder(targetUrl);
+    if (userId != null) {
+      builder.append("?")
+          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+          .append("=")
+          .append(userId);
+    }
+    if(id != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+          .append("=")
+          .append(id);	
+    }
+    if(albumId != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+          .append("=")
+          .append(albumId);	
+    }
+    if (tabId != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+	      .append("=")
+	      .append(tabId);
+    }
+    if (subscribe != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_SUBSCRIBE)
+	      .append("=")
+	      .append(subscribe);
+    }
+    return builder.toString();
+  }
+  
+  public String getSearchUrl(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos, String search_text) {
 	    if (targetUrl == null) {
 	      targetUrl = configManager.getMainPageUrl();
 	    }

@@ -56,6 +56,16 @@
     <servlet-name>TrendingCronServlet</servlet-name>
     <servlet-class>com.google.cloud.demo.TrendingCronServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>SetCronTimeServlet</servlet-name>
+    <servlet-class>com.google.cloud.demo.SetCronTimeServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SetCronTimeServlet</servlet-name>
+    <url-pattern>/rate</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>TrendingCronServlet</servlet-name>
