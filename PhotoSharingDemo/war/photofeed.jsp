@@ -286,7 +286,7 @@ function toggleCommentPost(id, expanded) {
    
     <div class="glow"></div>
   	<div class="tabContent" id="managestream">
-      <div class="manage-own">
+      <div class="view-title">
         <form action="<%= configManager.getManageAlbumsUrl() %>"
               method="post">     
 	        <p>MANAGE STREAMS</p>
@@ -387,7 +387,7 @@ function toggleCommentPost(id, expanded) {
 
 
 	<div class="tabContent" id="createstream">
-      <div class="create">
+      <div class="view-title">
         <p>CREATE STREAMS</p>
         <form action="<%= configManager.getCreateAlbumUrl() %>"
               method="post">     
@@ -426,7 +426,7 @@ function toggleCommentPost(id, expanded) {
 		String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
 		viewManager.addAlbumView(streamId);
 	%>
-		<div class="page-title">
+		<div class="view-title">
 		<%
 		Album albm = albumManager.getAlbum(streamUserId, Long.parseLong(streamId));
 		if (albm != null) {	
@@ -475,27 +475,8 @@ function toggleCommentPost(id, expanded) {
 		}
 		%>		
 		</div>
-		<%-- MM: we enable the user to pick up a picture to add to the stream --%>
 		
-    	<div id="upload-wrap">
-      		<div id="upload">
-        		<a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Add an image</a>
-        		<div id="upload-form" style="display:none">
-          			<form action="<%= serviceManager.getUploadUrl()%>" method="post" 
-            			enctype="multipart/form-data">
-            			<input id="input-file" class="inactive file btn" type="file" name="photo"
-              				onchange="onFileSelected()">
-              			<input type="hidden" name="stream-id" value="<%= streamId%>">
-            			<textarea name="title" placeholder="Write a description"></textarea>
-            			<input id="btn-post" class="active btn" type="submit" value="Upload file">
-            			<a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
-          			</form>
-        		</div>
-      		</div>
-      		<!-- /#upload -->
-    	</div>
-    	<!-- /#upload-wrap -->
-
+		</div>
     <%-- MM: adds the new picture to the album  --%>
     	<!-- KK -->
     	<%
@@ -528,6 +509,8 @@ function toggleCommentPost(id, expanded) {
         	if (count == photos.size() - 1) {
           		lastClass = "last";
         	}
+        	if (photos.size()!=0)
+        	{; // show a picture only if there is at least one in the list
     	%>
     		<div class="feed <%= firstClass %> <%= lastClass %>"  
     			onclick="selectCover( <%= Integer.toString(count + 1) %>, '<%= reloadUrl%>')">
@@ -557,9 +540,13 @@ function toggleCommentPost(id, expanded) {
     	</div>
     	<!-- /.feed -->
    	<%
+	}
         	count++;
       	}
-    %>
+      	
+       if (count ==3) { %>   	
+	
+ 
       	<%-- MM:the More pictures button after the 3 shown pictures --%>
         <div class="next-3-pict">
         	<form action="<%= serviceManager.getRedirectUrl(null, streamUserId, null, 
@@ -570,12 +557,40 @@ function toggleCommentPost(id, expanded) {
                    <input id="btn-post" class="active btn" type="submit" value="More pictures">
             </form>
         </div>
+    		<%-- MM: we enable the user to pick up a picture to add to the stream --%>
+		<% } %>
+		
+    	<div id="upload-wrap">
+      		<div id="upload">
+        		<a id="btn-choose-image" class="active btn" onclick="togglePhotoPost(true)">Add an image</a>
+        		<div id="upload-form" style="display:none">
+          			<form action="<%= serviceManager.getUploadUrl()%>" method="post" 
+            			enctype="multipart/form-data">
+            			<input id="input-file" class="inactive file btn" type="file" name="photo"
+              				onchange="onFileSelected()">
+              			<input type="hidden" name="stream-id" value="<%= streamId%>">
+            			<textarea name="title" placeholder="Write a description"></textarea>
+            			<input id="btn-post" class="active btn" type="submit" value="Upload file">
+            			<a class="cancel" onclick="togglePhotoPost(false)">Cancel</a>
+          			</form>
+        		</div>
+      		</div>
+      		<!-- /#upload -->
+    	</div>
+    	<!-- /#upload-wrap -->
 
-   
-
-   <%
+      
+      <% 
+    
 	}
 	else {
+		
+   %>		
+	     <div class="view-title">
+          <p>VIEW ALBUMS</p>
+        </div>
+   <% 
+		
     	albumIter = albumManager.getActiveAlbums();
       	albums = new ArrayList<Album>();
       	try {
@@ -650,7 +665,7 @@ function toggleCommentPost(id, expanded) {
 
     <div class="tabContent" id="searchstream">
     <%--MM: should ask for what to search and allow the push of the "Search" button --%>
-      <div class="create">
+      <div class="view-title">
         <p>SEARCH STREAMS</p>
       
           <div>
@@ -667,7 +682,9 @@ function toggleCommentPost(id, expanded) {
   				albums = new ArrayList<Album>();
   				try {
     				for (Album album : albumIter) {
-        				if ((album.getTitle()).indexOf(search_text) != -1) albums.add(album);
+        				if ((album.getTitle()).indexOf(search_text) != -1) {albums.add(album); }
+        				else 
+        					if ((album.getTags()!=null)&& (album.getTags()).indexOf(search_text) != -1) {albums.add(album);}
         			}
   				} catch (DatastoreNeedIndexException e) {
         			pageContext.forward(configManager.getErrorPageUrl(
@@ -733,7 +750,7 @@ function toggleCommentPost(id, expanded) {
 
 
  	<div class="tabContent" id="trendingstream">
-      <div class="create">
+      <div class="view-title">
         <p>TOP 3 TRENDING STREAMS</p>
       </div>
          	<%
@@ -843,7 +860,7 @@ function toggleCommentPost(id, expanded) {
 
     
  	<div class="tabContent" id="socialstream">
-      <div class="create">
+      <div class="view-title">
         <p>SOCIAL STREAMS</p>
       </div>
     </div>

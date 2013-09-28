@@ -9,27 +9,29 @@ body {
   width: 1250px;
 }
 
-.wrap .logoutgroup {
-    position: relative;   
-	top:5px;
-	left:200px;	
-}
-
 .header {
   background: #f8f8f8 url('img/bg.gif') repeat;
-  margin: -8px 0 0 -1px;
+  margin: -18px 0 0 -1px;
   padding: 0 0 16px 0;
   position: fixed;
   width: 100%;
+}
+
+.logoutgroup {
+	margin: -18px 0 0 -1px;
+    padding: 0 0 16px 0;
+    position: fixed;   
+	top:15px;
+	left:325px;	
 }
 
 .glow {
   width: 1000px;
   margin-right: 0;
   height: 8px;
-  position: absolute;
+  position: fixed;
   top: 80px;
-  left: 300px;
+  left: 15px;
   opacity: 1;
   border-top: 1px solid rgba(0, 0, 0, 0.4);
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .3)), to(transparent));
@@ -56,57 +58,18 @@ div.tabContent {
 
 div.tabContent.hide { display: none; }
 
-div.tabContent#createstream .create {
-	width:970px;
-	margin: 80px 0 0 0;
-}
+.view-title   { width: 970px; margin: 80px 0 0 5px; font-weight: bold;}
 
-div.tabContent#createstream .create .tags {
-	position:relative;
+div.tabContent#managestream .manage-own   { width: 970px; margin: 20px 0 0 5px; font-weight: bold;}
+div.tabContent#createstream .view-title .tags { 
+	position:relative; 
 	top:-370px;
 	left:350px;
-}
-
-div.tabContent#searchstream .create {
-	width:970px;
-	margin: 80px 0 0 0;
 }
 
 div.tabContent#searchstream .logoutmsg {
 	width:970px;
 	margin: 80px 0 0 0;
-}
-
-div.tabContent#viewstream .create {
-	width:970px;
-	margin: 80px 0 0 0;
-}
-
-div.tabContent#managestream .create {
-	width:970px;
-	margin: 80px 0 0 0;
-}
-
-div.tabContent#trendingstream .create {
-	width:970px;
-	margin: 80px 0 0 0;
-}
-
-div.tabContent#socialstream .create {
-	width:970px;
-	margin: 80px 0 0 0;
-}
-
-div.tabContent#viewstream .page-title {
-	width:970px;
-	margin: 80px 0 0 0;
-	font-weight: bold;
-}
-
-div.tabContent#viewstream .create {
-  position:absolute;
-  top: 650px;
-  left: 30px;
 }
 
 div.tabContent#viewstream .next-3-pict {
@@ -115,12 +78,12 @@ div.tabContent#viewstream .next-3-pict {
   left: 5px;
 }
 
-div.tabContent#viewstream .subscribe {
+.subscribe {
   position:relative;
   top: 0px;
   left: 5px;
-}
-
+  }
+  
 div.tabContent#viewstream .box {
   position:absolute;
   top: 600px;
@@ -142,13 +105,11 @@ div.tabContent#viewstream .box {
 }
 
 #upload-wrap {
-  position: relative;
   left: 10px;
-  top: 500px;
+  top: 50px;
 }
 
 #upload {
-  position: fixed;
   width: 300px;
 }
 
@@ -282,11 +243,14 @@ textarea {
   border-radius: 3px;
   box-shadow: 0 0 2px #d8d8d8;
   margin: 10px 0 10px 0;
-  margin-top: 17px;
+  margin-top: 15px;
   float: left;
   width: 330px;
 }
 
+.feed :hover{
+	background: #F8F8F8;
+}
 .feed.first {
   /*margin-top: 47px;*/
 }
@@ -299,6 +263,10 @@ textarea {
   list-style-type: none;
   margin-top: 27px;
   padding: 15px 15px 12px 15px;
+}
+
+.feed .post :hover {
+	background-color: #FFF;
 }
 
 .feed .post .owner {
@@ -390,6 +358,12 @@ textarea {
   overflow: hidden;
   width: 300px;
 }
+
+.image-wrap :hover {
+	box-shadow: inset 0 0 10px 0 #fff;
+
+	}
+
 .photo-image {
   vertical-align: middle;
   width: 100%;
