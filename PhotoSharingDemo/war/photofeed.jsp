@@ -335,6 +335,10 @@ window.fbAsyncInit = function() {
                   <a href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign out
                   </a>
          </p>
+    <% } else {%>
+                  <a href=<%= userService.createLoginURL(configManager.getMainPageUrl())%>>Sign in
+                  </a>
+   
     <% } %>  
     </div>
       
@@ -354,9 +358,12 @@ window.fbAsyncInit = function() {
     <div class="glow"></div>
   	<div class="tabContent" id="managestream">
       <div class="view-title">
+	        <p>MANAGE STREAMS</p>
+	  <%
+    	if	(currentUser != null) { 
+	  %>
         <form action="<%= configManager.getManageAlbumsUrl() %>"
               method="post">     
-	        <p>MANAGE STREAMS</p>
 	        <p>Streams I own:</p>
 	        <table border="1">
 			 <tr>
@@ -366,7 +373,6 @@ window.fbAsyncInit = function() {
 			 	<th>Delete</th>
 			 </tr>
 		    <%
-		    if	(currentUser != null) { 
 		      Iterable<Album> albumIter = albumManager.getOwnedAlbums(currentUser.getUserId());
 		      ArrayList<Album> albums = new ArrayList<Album>();
 		      try {
@@ -377,8 +383,9 @@ window.fbAsyncInit = function() {
 		        pageContext.forward(configManager.getErrorPageUrl(
 		          ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
 		      }
-		
+			  int table_count = 0;
 		      for (Album album : albums) {
+		    	  table_count++;
 		    %>
 				 <tr>
 				 	<td><a href=<%= serviceManager.getRedirectUrl(null, currentUser.getUserId(), null, 
@@ -388,12 +395,26 @@ window.fbAsyncInit = function() {
 				 	<td><%= photoManager.getAlbumSize(currentUser.getUserId(),album.getId().toString())%></td>
 					<td><input type="checkbox" name="delete-box" value=<%= album.getId().toString() %>></td>
 				 </tr>
-			 <%	} }%>
+			 <%	} %>
 			 </table> 
-	        <input id="delete-streams" class="active btn" type="submit" value="Delete Checked">
- 	    </form>      
+			 <%
+		      	String btn_type = "submit";
+			 	if (table_count == 0) {
+			 		btn_type = "hidden";
+			 %>
+	     	<p>Please create new streams...</p>			 
+  			<%	} %>
+	        <input id="delete-streams" class="active btn" type=<%= btn_type %> value="Delete Checked">
+ 	    </form>    
+	  <% } else {%> 	
+	     <p>Please login in order to manage your streams...</p>
+	  <% } %>
+	        
       </div>
       <div class="manage-subscribed">
+	  <%	      
+        if	(currentUser != null) { 
+      %>
         <form action="<%= configManager.getManageAlbumsUrl() %>"
               method="post">
                 <p>Streams I subscribe to:</p>
@@ -406,8 +427,7 @@ window.fbAsyncInit = function() {
                                 <th>Unsubscribe</th>
                          </tr>
 
-                    <%
-        		    if	(currentUser != null) { 
+                    <% 
                       Iterable<Subscription> subscriptions_Iter = subscriptionManager.getSubscriberAlbums(currentUser.getUserId().toString()); 
                       ArrayList<Album> sub_albums = new ArrayList<Album>();
                       try {
@@ -420,16 +440,17 @@ window.fbAsyncInit = function() {
                         pageContext.forward(configManager.getErrorPageUrl(
                           ConfigManager.ERROR_CODE_DATASTORE_INDEX_NOT_READY));
                       }
-
+                      
+        			  int table_count = 0;
                       for (Album sub_album : sub_albums) {
+                    	table_count++;
                   		Iterable<View> albumViews = viewManager.getAlbumViews(sub_album.getId().toString());
                 		long viewCount = 0;
                 		for (View view : albumViews) {
                 			viewCount++;
                 		}
-
-                    %>
-                                 <tr>
+					%>
+                                  <tr>
                                         <td><a href=<%= serviceManager.getSubscribeUrl(null, sub_album.getOwnerId(), null,
                                                         sub_album.getId().toString(),
                                                          ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, "Subscribe") %>> <%= sub_album.getTitle() %></a></td>
@@ -439,11 +460,19 @@ window.fbAsyncInit = function() {
                                         <td><input type="checkbox" name="unsubscribe-box" value=<%= sub_album.getId().toString() %>></td>
                                  </tr>
                      <%     
-                     } }
+                     }
                      %>
                          </table>
-                <input id="unsubscribe-streams" class="active btn" type="submit" value="Unsubscribe Checked">
+	 			 <%
+			      	String btn_type = "submit";
+				 	if (table_count == 0) {
+				 		btn_type = "hidden";
+				 %>
+		     	<p>Please subscribe to new streams...</p>			 
+	  			<%	} %>
+                <input id="unsubscribe-streams" class="active btn" type=<%= btn_type%> value="Unsubscribe Checked">
             </form>     
+      <% } %>
       </div>
 
 
@@ -463,6 +492,8 @@ window.fbAsyncInit = function() {
 	if (error_in_page==0) { %>
       <div class="view-title">
         <p>CREATE STREAMS</p>
+        <% if (currentUser != null) { 
+		 %>
         <form action="<%= configManager.getCreateAlbumUrl() %>"
               method="post">     
 	        <input id="stream-name" class="input text" name="stream" type="text" value="Stream name here...">
@@ -479,6 +510,9 @@ window.fbAsyncInit = function() {
 		     	<p>(Can be empty)</p>        
 		     </div>
 	    </form>
+	    <% } else { %>
+	     <p>Please login in order to create new streams...</p>	    
+	    <% } %>
      </div>
      <% } else { %>
      <div class="view-title">
@@ -510,21 +544,22 @@ window.fbAsyncInit = function() {
 		viewManager.addAlbumView(streamId);
 	%>
 		<div class="view-title">
-		    <div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-width="450" data-show-faces="true" data-send="true">
-		    </div>  
 		<%
 		Album albm = albumManager.getAlbum(streamUserId, Long.parseLong(streamId));
 		if (albm != null) {	
 		%>
-			<p>Stream Name: "<%= albm.getTitle()%>"
-	  		for user: "<%= albm.getOwnerNickname() %>" </p>
+			<p>View pictures from stream: "<%= albm.getTitle()%>"
+	  		posted by user: "<%= albm.getOwnerNickname() %>" </p>
+	  		<div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-width="450" data-show-faces="true" data-send="true">
+		    </div>  
+	  		
 		<%
 		}
 		%>
 		<% 
 	    if	(currentUser != null) { 
-		if(currentUser.getUserId().toString().compareTo(streamUserId) != 0)
-		{
+		  if(currentUser.getUserId().toString().compareTo(streamUserId) != 0)
+		  {
 		%>
 						<%-- MM: Subscribe  --%>
 	        <div class="subscribe">
@@ -558,8 +593,10 @@ window.fbAsyncInit = function() {
 	            </form>
 	        </div>
 		<% 
-		} }
-		%>		
+		} } else {
+		%>	
+	     <p>Please login in order to subscribe to this stream...</p>	    			
+		<% } %>
 		</div>
 		
     <%-- MM: adds the new picture to the album  --%>

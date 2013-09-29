@@ -143,12 +143,14 @@
 
   <security-constraint>
     <web-resource-collection>
-       <url-pattern>/*</url-pattern> 
-<!-- <url-pattern>/create</url-pattern>
+ <!--      
+ 	<url-pattern>/*</url-pattern>
+-->
+ 	<url-pattern>/create</url-pattern>
     <url-pattern>/manage</url-pattern>
     <url-pattern>/post</url-pattern>
     <url-pattern>/cover</url-pattern>
-    <url-pattern>/upload</url-pattern>  -->
+    <url-pattern>/upload</url-pattern> 
     </web-resource-collection>
     <auth-constraint>
       <role-name>*</role-name>
