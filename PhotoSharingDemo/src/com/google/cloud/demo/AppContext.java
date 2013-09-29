@@ -165,7 +165,7 @@ public class AppContext {
 	  Entity interval = datastore.get(reportIntervalKey);	
 	  interval.setProperty("PreviousReportTime", option);
 	  datastore.put(interval);
-	  
+	  // just for testing commit and push
   }
 
 }
