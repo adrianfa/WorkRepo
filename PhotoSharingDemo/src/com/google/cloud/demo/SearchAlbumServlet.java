@@ -20,7 +20,7 @@ public class SearchAlbumServlet extends HttpServlet {
     String search_txt = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_STREAM);
     
       res.sendRedirect(appContext.getPhotoServiceManager().getSearchUrl(
-              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "searchstream", null,search_txt));
+              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), null, null, null, "searchstream", null,search_txt));
   }
 
 }

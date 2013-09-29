@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
+
 public class SetCronTimeServlet extends HttpServlet {
 
 
@@ -17,12 +19,18 @@ public class SetCronTimeServlet extends HttpServlet {
 @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
     AppContext appContext = AppContext.getAppContext();
-    String[] values = req.getParameterValues("course");
+    //String[] values = req.getParameterValues("course");
     String search_txt = req.getParameter("course");
     
-    if(search_txt == null)
-    	search_txt = "no_reports";
-
+	try {
+	    if(search_txt == null)
+				search_txt = appContext.getReportInterval();
+		else 
+				appContext.setReportInterval(search_txt);
+	} catch (EntityNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
     res.sendRedirect(appContext.getPhotoServiceManager().getSearchUrl(
               req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "trendingstream", null, search_txt));
   }

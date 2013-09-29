@@ -47,42 +47,61 @@ public class PhotoServiceManager {
   }
 
   public String getUploadUrl() {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    UploadOptions uploadOptions = null;
-    String bucket = configManager.getGoogleStorageBucket();
-    
-    /////////////////////////////////////////////   
-    bucket = null; //MM: force it to work without GCS for now
-    /////////////////////////////////////////////
-    
-    if (bucket == null || bucket.isEmpty()) {
-      uploadOptions = UploadOptions.Builder.withDefaults();
-    } else {
-      uploadOptions = UploadOptions.Builder.withGoogleStorageBucketName(bucket);
-    }
-    String createdUrl = blobstoreService.createUploadUrl(configManager.getUploadHandlerUrl(), uploadOptions);
-    String retUrl = StripUrlFromParameters(createdUrl);
-    return createdUrl;
-  }
-
-  private String StripUrlFromParameters(String createdUrl)
-  {
-	  //createdUrl = "http://balaurbun2013.appspot.com/_ah/upload/?user=118090058030877094640&stream-id=5118776383111168&tabId=viewstream/AMmfu6ZKQwzrU5ADi7hJe-nef6TBKXeqKObGNOlHySg0gZFRJj63WuFj-tYbktYtwqdZbLnaZcbAC6dRVWUtbnfeXx_XRslsqfgKM4lMXymCxKbZBk5yNgOKNLRRAbcl7UJ06je4zOAA/ALBNUaYAAAAAUkQcfuvOOrmVEyMcLWgOhqpdE-XXW0QF/";
-	  String retUrl = null;
-	  int mark = createdUrl.lastIndexOf('?');
-	  if(mark == -1)
-		  retUrl = createdUrl;
-	  else {
-		  int slash = createdUrl.indexOf('/', mark);
-		  if(slash != -1) {
-			  int end = createdUrl.length() - 1;
-			  String blob_part = createdUrl.substring(slash+1, end);
-			  String hostUrl = createdUrl.substring(0, mark);
-			  retUrl = hostUrl.concat(blob_part);
-		  }
+	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+	    UploadOptions uploadOptions = null;
+	    String bucket = configManager.getGoogleStorageBucket();
+	    
+	    /////////////////////////////////////////////   
+	    bucket = null; //MM: force it to work without GCS for now
+	    /////////////////////////////////////////////
+	    
+	    if (bucket == null || bucket.isEmpty()) {
+	      uploadOptions = UploadOptions.Builder.withDefaults();
+	    } else {
+	      uploadOptions = UploadOptions.Builder.withGoogleStorageBucketName(bucket);
+	    }
+	    String createdUrl = blobstoreService.createUploadUrl(configManager.getUploadHandlerUrl(), uploadOptions);
+	    String retUrl = StripUrlFromParameters(createdUrl);
+	    return createdUrl;
 	  }
-	  return retUrl;
-  }
+
+  public String getCreateAlbumCoverUrl() {
+	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+	    UploadOptions uploadOptions = null;
+	    String bucket = configManager.getGoogleStorageBucket();
+	    
+	    /////////////////////////////////////////////   
+	    bucket = null; //MM: force it to work without GCS for now
+	    /////////////////////////////////////////////
+	    
+	    if (bucket == null || bucket.isEmpty()) {
+	      uploadOptions = UploadOptions.Builder.withDefaults();
+	    } else {
+	      uploadOptions = UploadOptions.Builder.withGoogleStorageBucketName(bucket);
+	    }
+	    String createdUrl = blobstoreService.createUploadUrl(configManager.getCreateAlbumUrl(), uploadOptions);
+	    String retUrl = StripUrlFromParameters(createdUrl);
+	    return createdUrl;
+	  }
+
+	  private String StripUrlFromParameters(String createdUrl)
+	  {
+		  //createdUrl = "http://balaurbun2013.appspot.com/_ah/upload/?user=118090058030877094640&stream-id=5118776383111168&tabId=viewstream/AMmfu6ZKQwzrU5ADi7hJe-nef6TBKXeqKObGNOlHySg0gZFRJj63WuFj-tYbktYtwqdZbLnaZcbAC6dRVWUtbnfeXx_XRslsqfgKM4lMXymCxKbZBk5yNgOKNLRRAbcl7UJ06je4zOAA/ALBNUaYAAAAAUkQcfuvOOrmVEyMcLWgOhqpdE-XXW0QF/";
+		  String retUrl = null;
+		  int mark = createdUrl.lastIndexOf('?');
+		  if(mark == -1)
+			  retUrl = createdUrl;
+		  else {
+			  int slash = createdUrl.indexOf('/', mark);
+			  if(slash != -1) {
+				  int end = createdUrl.length() - 1;
+				  String blob_part = createdUrl.substring(slash+1, end);
+				  String hostUrl = createdUrl.substring(0, mark);
+				  retUrl = hostUrl.concat(blob_part);
+			  }
+		  }
+		  return retUrl;
+	  }
   
   public String getThumbnailUrl(BlobKey blobKey) {
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
@@ -260,9 +279,14 @@ public class PhotoServiceManager {
 	      targetUrl = configManager.getMainPageUrl();
 	    }
 	    StringBuilder builder = new StringBuilder(targetUrl);
+	      builder.append("?");
+	    if ( search_text != null) {
+	    	builder.append(ServletUtils.REQUEST_PARAM_NAME_SEARCH_TXT)
+		      .append("=")
+		      .append(search_text);
 	    if (userId != null) {
-	      builder.append("?")
-	          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+	    	  builder.append("&")
+	    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
 	          .append("=")
 	          .append(userId);
 	    }
@@ -290,11 +314,6 @@ public class PhotoServiceManager {
 		      .append("=")
 		      .append(which_photos);
 	    }
-	    if ( search_text != null) {
-	    	builder.append("&")
-	    	  .append(ServletUtils.REQUEST_PARAM_NAME_SEARCH_TXT)
-		      .append("=")
-		      .append(search_text);
 	    }
 	    return builder.toString();
 	  }
