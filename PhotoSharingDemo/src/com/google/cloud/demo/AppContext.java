@@ -157,6 +157,7 @@ public class AppContext {
 	  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	  Entity interval = datastore.get(reportIntervalKey);	
 	  return (long) interval.getProperty("PreviousReportTime");
+	  
   }
   
   public void setPreviousReportTime(long option) throws EntityNotFoundException {
@@ -164,6 +165,7 @@ public class AppContext {
 	  Entity interval = datastore.get(reportIntervalKey);	
 	  interval.setProperty("PreviousReportTime", option);
 	  datastore.put(interval);
+	  
   }
 
 }
