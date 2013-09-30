@@ -332,7 +332,7 @@ window.fbAsyncInit = function() {
     <%if(currentUser != null) { %>  
          <p>Hello <%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %> , 
                   <%= currentUser.getEmail() %> , 
-                  <a href=<%= userService.createLogoutURL(configManager.getMainPageUrl())%>>Sign out
+                  <a href=<%= userService.createLogoutURL(configManager.getLoginPageUrl())%>>Sign out
                   </a>
          </p>
     <% } else {%>

@@ -109,6 +109,13 @@ public class ConfigManager {
     return "/photofeed.jsp";
   }
 
+  /**
+   * The login web page URL.
+   */
+  public String getLoginPageUrl() {
+    return "/Login.jsp";
+  }
+
   public String getErrorPageUrl(int code) {
     return "/error.jsp?" + ServletUtils.REQUEST_PARAM_NAME_CODE + "=" + code;
   }
