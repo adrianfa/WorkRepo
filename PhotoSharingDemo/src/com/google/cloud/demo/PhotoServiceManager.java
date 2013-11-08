@@ -46,7 +46,7 @@ public class PhotoServiceManager {
     this.photoManager = photoManager;
   }
 
-  public String getUploadUrl() {
+  public String getUploadUrl(boolean multiple) {
 	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 	    UploadOptions uploadOptions = null;
 	    String bucket = configManager.getGoogleStorageBucket();
@@ -60,7 +60,10 @@ public class PhotoServiceManager {
 	    } else {
 	      uploadOptions = UploadOptions.Builder.withGoogleStorageBucketName(bucket);
 	    }
-	    String createdUrl = blobstoreService.createUploadUrl(configManager.getUploadHandlerUrl(), uploadOptions);
+	    String handler = configManager.getUploadHandlerUrl();
+	    if(multiple)
+	    	handler = "/UploadServlet";
+	    String createdUrl = blobstoreService.createUploadUrl(handler, uploadOptions);
 	    String retUrl = StripUrlFromParameters(createdUrl);
 	    return createdUrl;
 	  }
@@ -190,6 +193,153 @@ public class PhotoServiceManager {
   public String getRedirectUrl(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos) {
     if (targetUrl == null) {
       targetUrl = configManager.getMainPageUrl();
+    }
+    StringBuilder builder = new StringBuilder(targetUrl);
+    if (userId != null) {
+      builder.append("?")
+          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+          .append("=")
+          .append(userId);
+    }
+    if(id != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+          .append("=")
+          .append(id);	
+    }
+    if(albumId != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+          .append("=")
+          .append(albumId);	
+    }
+    if (tabId != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+	      .append("=")
+	      .append(tabId);
+    }
+    if (which_photos != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_LOC)
+	      .append("=")
+	      .append(which_photos);
+    }
+    return builder.toString();
+  }
+  
+  /**
+   * Constructs a redirect url to specific photo. if the photo information is not available, return
+   * to the main page.
+   *
+   * @param targetUrl target url. If null,
+   * @param userId the photo owner id
+   * @param id the photo id.
+   * @param next_three_photos starting with which three pictures to show now
+   *
+   * @return the url string to the main page.
+   */
+  public String getCreateUrl(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos) {
+    if (targetUrl == null) {
+      targetUrl = configManager.getCreatePageUrl();
+    }
+    StringBuilder builder = new StringBuilder(targetUrl);
+    if (userId != null) {
+      builder.append("?")
+          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+          .append("=")
+          .append(userId);
+    }
+    if(id != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+          .append("=")
+          .append(id);	
+    }
+    if(albumId != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+          .append("=")
+          .append(albumId);	
+    }
+    if (tabId != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+	      .append("=")
+	      .append(tabId);
+    }
+    if (which_photos != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_LOC)
+	      .append("=")
+	      .append(which_photos);
+    }
+    return builder.toString();
+  }
+  
+  /**
+   * Constructs a redirect url to specific photo. if the photo information is not available, return
+   * to the main page.
+   *
+   * @param targetUrl target url. If null,
+   * @param userId the photo owner id
+   * @param id the photo id.
+   * @param next_three_photos starting with which three pictures to show now
+   *
+   * @return the url string to the main page.
+   */
+  public String getManageUrl(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos) {
+    if (targetUrl == null) {
+      targetUrl = configManager.getManagePageUrl();
+    }
+    StringBuilder builder = new StringBuilder(targetUrl);
+    if (userId != null) {
+      builder.append("?")
+          .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID)
+          .append("=")
+          .append(userId);
+    }
+    if(id != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_ID)
+          .append("=")
+          .append(id);	
+    }
+    if(albumId != null) {
+    	builder.append("&")  	 
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID)
+          .append("=")
+          .append(albumId);	
+    }
+    if (tabId != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_TAB_ID)
+	      .append("=")
+	      .append(tabId);
+    }
+    if (which_photos != null) {
+    	builder.append("&")
+    	  .append(ServletUtils.REQUEST_PARAM_NAME_PHOTO_LOC)
+	      .append("=")
+	      .append(which_photos);
+    }
+    return builder.toString();
+  }
+  
+  /**
+   * Constructs a redirect url to specific photo. if the photo information is not available, return
+   * to the main page.
+   *
+   * @param targetUrl target url. If null,
+   * @param userId the photo owner id
+   * @param id the photo id.
+   * @param next_three_photos starting with which three pictures to show now
+   *
+   * @return the url string to the main page.
+   */
+  public String getViewUrl(String targetUrl, String userId, String id, String albumId, String tabId, String which_photos) {
+    if (targetUrl == null) {
+      targetUrl = configManager.getViewPageUrl();
     }
     StringBuilder builder = new StringBuilder(targetUrl);
     if (userId != null) {

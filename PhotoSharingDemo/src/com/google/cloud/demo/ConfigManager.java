@@ -80,6 +80,13 @@ public class ConfigManager {
   public String getSearchAlbumUrl() {
     return "/search";
   }
+  
+  /**
+   * The search servlet URL.
+   */
+  public String getRebuildIndexUrl() {
+    return "/cron/hints";
+  }
 
   /**
    * The set cron time servlet URL.
@@ -107,6 +114,27 @@ public class ConfigManager {
    */
   public String getMainPageUrl() {
     return "/photofeed.jsp";
+  }
+
+  /**
+   * The view web page URL.
+   */
+  public String getViewPageUrl() {
+    return "/View.jsp";
+  }
+
+  /**
+   * The create web page URL.
+   */
+  public String getCreatePageUrl() {
+    return "/Create.jsp";
+  }
+
+  /**
+   * The manage web page URL.
+   */
+  public String getManagePageUrl() {
+    return "/Manage.jsp";
   }
 
   /**

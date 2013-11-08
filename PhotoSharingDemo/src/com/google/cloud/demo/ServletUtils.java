@@ -44,6 +44,9 @@ public final class ServletUtils extends HttpServlet {
   public static final String REQUEST_PARAM_NAME_SEARCH_TXT = "search_txt";
   public static final String REQUEST_PARAM_NAME_SUBSCRIBE = "subscribe";
   public static final String REQUEST_PARAM_NAME_MESSAGE = "message";
+  public static final String REQUEST_PARAM_NAME_SEARCH_HINT = "term";
+  public static final String REQUEST_PARAM_NAME_SEARCH_BUTTON = "Rebuild";
+  
   // The error code.
   public static final String REQUEST_PARAM_NAME_CODE = "code";
   public static final String[] USER_ICONS = new String[] {

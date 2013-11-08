@@ -10,4 +10,9 @@
     <description>Compute top trending streams</description>
     <schedule>every 5 minutes</schedule>
   </cron>
+  <cron>
+    <url>/cron/hints</url>
+    <description>Refresh search hint list</description>
+    <schedule>every 1 hour</schedule>
+  </cron>
 </cronentries>

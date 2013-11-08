@@ -58,9 +58,35 @@
   </servlet>
   
   <servlet>
+    <servlet-name>UpdateSearchHintServlet</servlet-name>
+    <servlet-class>com.google.cloud.demo.UpdateSearchHintServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>SetCronTimeServlet</servlet-name>
     <servlet-class>com.google.cloud.demo.SetCronTimeServlet</servlet-class>
   </servlet>
+  <servlet>
+     <servlet-name>UploadServlet</servlet-name>
+      <servlet-class>com.google.cloud.demo.UploadServlet</servlet-class>
+  </servlet>
+    
+    
+ <servlet>
+     <servlet-name>AutocompleteServletAPI</servlet-name>
+      <servlet-class>com.google.cloud.demo.AutocompleteServletAPI</servlet-class>
+  </servlet>
+    
+    
+  <servlet-mapping>
+      <servlet-name>AutocompleteServletAPI</servlet-name>
+      <url-pattern>/AutocompleteServletAPI</url-pattern>
+  </servlet-mapping>
+    
+  <servlet-mapping>
+      <servlet-name>UploadServlet</servlet-name>
+      <url-pattern>/UploadServlet</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>SetCronTimeServlet</servlet-name>
@@ -75,6 +101,11 @@
   <servlet-mapping>
     <servlet-name>CleanUpServlet</servlet-name>
     <url-pattern>/cron/clean</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>UpdateSearchHintServlet</servlet-name>
+    <url-pattern>/cron/hints</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -125,9 +156,9 @@
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>photofeed.jsp</welcome-file>
-<!--    
-    <welcome-file>Login.html</welcome-file>
- -->    
+   
+    <welcome-file>Connexus.jsp</welcome-file>
+ <!--  -->    
   </welcome-file-list>
 
   <servlet>

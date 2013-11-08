@@ -80,10 +80,14 @@ public class CreateAlbumServlet extends HttpServlet {
           String title =albm.getTitle();
           if ((albm.getTitle()).equals(content))
           {   
-            res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-                            req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), 
-                                             appContext.getCurrentUser().getUserId(), 
-                                             null, null, "createstream", "1"));
+              //res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
+              //        req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), 
+              //                         appContext.getCurrentUser().getUserId(), 
+              //                         null, null, "createstream", "1"));
+              res.sendRedirect(appContext.getPhotoServiceManager().getCreateUrl(
+                      req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), 
+                                       appContext.getCurrentUser().getUserId(), 
+                                       null, null, "createstream", "1"));
             return;
           }
       	  }
@@ -160,8 +164,10 @@ public class CreateAlbumServlet extends HttpServlet {
       builder.append("Bad parameters");
     }
     if (succeeded) {
-      res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
-              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "managestream", null));
+        //res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
+        //        req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "managestream", null));
+        res.sendRedirect(appContext.getPhotoServiceManager().getManageUrl(
+                req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "managestream", null));
     } else {
       res.sendError(400, builder.toString());
     }

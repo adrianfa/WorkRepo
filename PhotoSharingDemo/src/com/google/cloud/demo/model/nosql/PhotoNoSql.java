@@ -72,6 +72,8 @@ public class PhotoNoSql extends DemoEntityNoSql implements Photo {
   @Override
   public String getTitle() {
 	  String ret = (String) entity.getProperty(FIELD_NAME_TITLE);
+	  if(ret == null)
+		  ret = EMPTY_TITLE;
 	  if (ret.isEmpty())
 		  ret = EMPTY_TITLE;
     return ret; 
