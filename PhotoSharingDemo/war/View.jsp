@@ -24,7 +24,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Connexus Photo Album Mananger</title>
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -54,6 +54,44 @@
 
 <!-- Custom styles for this template -->
 <link href="navbar.css" rel="stylesheet">
+
+<script type="text/javascript">
+function isAlbumCover(sel, isCover) {
+	var element;
+	if( sel == 1)
+		element = document.getElementById("selectCover1");
+	else if( sel == 2)
+		element = document.getElementById("selectCover2");
+	else if( sel == 3)
+		element = document.getElementById("selectCover3");
+	var show = element.style.visibility;
+	if (isCover)
+		element.style.visibility = "visible";			
+	else
+		element.style.visibility = "hidden";
+}
+
+
+function selectCover(sel, url) {
+	//alert("We got a pageShow call!..."); 
+	var element;
+	if( sel == 1)
+		element = document.getElementById("selectCover1");
+	else if( sel == 2)
+		element = document.getElementById("selectCover2");
+	else if( sel == 3)
+		element = document.getElementById("selectCover3");
+	var show = element.style.visibility;
+	if (show == "visible")
+		element.style.visibility = "hidden";			
+	else
+		element.style.visibility = "visible";
+	var allUrl = "http://"; 
+	allUrl = allUrl.concat(document.location.host);
+	document.location.replace(allUrl.concat(url));
+}
+</script>
+
 </head>
 <body>
     <div class="container">
@@ -80,27 +118,21 @@
             <li><a href="Search.jsp">Search</a></li>
             <li><a href="Trending.jsp">Trending</a></li>
             <li><a href="Social.jsp">Social</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="./">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+    		<%if(currentUser != null) { %>  
+            <li><a>Hello <%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %> , 
+                  <%= currentUser.getEmail() %></a></li>
+            <li class="active">
+                  <a href=<%= userService.createLogoutURL(configManager.getLoginPageUrl())%>>Sign out</a>
+   			<% } else {%>
+            <li class="active">
+                  <a href=<%= userService.createLoginURL(configManager.getMainPageUrl())%>>Sign in</a>   
+   			<% } %>  
+    		</li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
-    </div> <!-- /container -->
 
 	<%
 	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID); 
@@ -247,7 +279,7 @@
  
       	<%-- MM:the More pictures button after the 3 shown pictures --%>
         <div class="next-3-pict">
-        	<form action="<%= serviceManager.getRedirectUrl(null, streamUserId, null, 
+        	<form action="<%= serviceManager.getViewUrl(null, streamUserId, null, 
 		 			                                       albm.getId().toString(), 
 		 			                                       ServletUtils.REQUEST_PARAM_NAME_VIEW_STREAM, String.valueOf(start_with_photo+3))
 		 			 %>"
@@ -385,6 +417,7 @@
     <%    
 	}
 	%>
+    </div> <!-- /container -->
 	
 </body>
 </html>

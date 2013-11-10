@@ -24,7 +24,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Connexus Photo Album Mananger</title>
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -56,27 +56,21 @@
             <li><a href="Search.jsp">Search</a></li>
             <li><a href="Trending.jsp">Trending</a></li>
             <li><a href="Social.jsp">Social</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="./">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+    		<%if(currentUser != null) { %>  
+            <li><a>Hello <%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %> , 
+                  <%= currentUser.getEmail() %></a></li>
+            <li class="active">
+                  <a href=<%= userService.createLogoutURL(configManager.getLoginPageUrl())%>>Sign out</a>
+   			<% } else {%>
+            <li class="active">
+                  <a href=<%= userService.createLoginURL(configManager.getMainPageUrl())%>>Sign in</a>   
+   			<% } %>  
+    		</li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
-    </div> <!-- /container -->
 
 	<% int error_in_page=0;
 	String same_name = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_LOC);
@@ -117,6 +111,7 @@
      </div>
      <%} %>
 
+    </div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript

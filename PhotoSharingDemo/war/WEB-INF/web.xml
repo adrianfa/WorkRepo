@@ -66,16 +66,26 @@
     <servlet-name>SetCronTimeServlet</servlet-name>
     <servlet-class>com.google.cloud.demo.SetCronTimeServlet</servlet-class>
   </servlet>
+
   <servlet>
      <servlet-name>UploadServlet</servlet-name>
       <servlet-class>com.google.cloud.demo.UploadServlet</servlet-class>
   </servlet>
-    
-    
+       
  <servlet>
      <servlet-name>AutocompleteServletAPI</servlet-name>
       <servlet-class>com.google.cloud.demo.AutocompleteServletAPI</servlet-class>
   </servlet>
+  
+  <servlet>
+	<servlet-name>singlestreamservletAPI</servlet-name>
+	<servlet-class>com.google.cloud.demo.SingleStreamServletAPI</servlet-class>
+  </servlet>
+	
+  <servlet-mapping>
+	<servlet-name>singlestreamservletAPI</servlet-name>
+	<url-pattern>/SingleStreamServletAPI</url-pattern>
+  </servlet-mapping>
     
     
   <servlet-mapping>
@@ -155,10 +165,10 @@
 
   <!-- Default page to serve -->
   <welcome-file-list>
+ <!--     
     <welcome-file>photofeed.jsp</welcome-file>
-   
+ -->   
     <welcome-file>Connexus.jsp</welcome-file>
- <!--  -->    
   </welcome-file-list>
 
   <servlet>

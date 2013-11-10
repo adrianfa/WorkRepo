@@ -80,7 +80,7 @@ public class ManageAlbumsServlet extends HttpServlet {
 	      builder.append("Bad parameters");
 	    }
 	    if (succeeded) {
-	      res.sendRedirect(appContext.getPhotoServiceManager().getRedirectUrl(
+	      res.sendRedirect(appContext.getPhotoServiceManager().getManageUrl(
 	              req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL), appContext.getCurrentUser().getUserId(), null, null, "managestream", null));
 	    } else {
 	      res.sendError(400, builder.toString());

@@ -113,7 +113,14 @@ public class ConfigManager {
    * The main web page URL.
    */
   public String getMainPageUrl() {
-    return "/photofeed.jsp";
+    return "/Connexus.jsp";
+  }
+
+  /**
+   * The search web page URL.
+   */
+  public String getSearchPageUrl() {
+    return "/Search.jsp";
   }
 
   /**

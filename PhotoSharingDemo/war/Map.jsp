@@ -48,42 +48,75 @@
 <!-- Custom styles for this template -->
 <link href="navbar.css" rel="stylesheet">
 
+
+<%
+	String streamId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_ALBUM_ID); 
+	String streamUserId = request.getParameter(ServletUtils.REQUEST_PARAM_NAME_PHOTO_OWNER_ID);
+%>
+
 <script type="text/javascript">
-	$(function() { 
+var begin = new Date();
+var finish = new Date();
+
+$(function() { 
 		demo.add(function() {
 			$('#map_canvas').gmap({'zoom': 2, 'disableDefaultUI':true}).bind('init', function(evt, map) { 
+			    var items = [];
+			    var stam = 0;
 				var bounds = map.getBounds();
 				var southWest = bounds.getSouthWest();
 				var northEast = bounds.getNorthEast();
 				var lngSpan = northEast.lng() - southWest.lng();
 				var latSpan = northEast.lat() - southWest.lat();
+
+				$.getJSON( "/SingleStreamServletAPI?user=<%=(streamUserId + "&stream-id=" + streamId) %>", function(data) {
+					data.forEach( function(item) {
+						items.push(item);
+						stam++;
+					});
+				});
 				for ( var i = 0; i < 1000; i++ ) {
 					var lat = southWest.lat() + latSpan * Math.random();
 					var lng = southWest.lng() + lngSpan * Math.random();
 					$(this).gmap('addMarker', { 
 						'position': new google.maps.LatLng(lat, lng) 
 					} ).mouseover(function() {
-						$('#map_canvas').gmap('openInfoWindow', { content : '<img src="img/photofeed.png"/>' }, this);
+						
+						var index = Math.round(1000  * Math.random()) % stam;
+						var pictureDate = new Date(items[index].createDate);
+						if(pictureDate.getTime() < begin.getTime() || pictureDate.getTime() > finish.getTime())
+							$('#map_canvas').gmap('openInfoWindow', { content : '<img src="img/photofeed.png"/> <p class="timestamp">' +
+								'Date out of range' + '</p>'}, this);
+						else
+							$('#map_canvas').gmap('openInfoWindow', { content : '<img class="photo-map" src='+items[index].bkUrl+
+								' /> <p class="timestamp">'  +items[index].createDate + '</p>'}, this);
 					});
-				}
+				} 
 				$(this).gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
 			});
 		}).load();
 	});
-</script>
-<script type="text/javascript">
+
 	$(function() {
+		var endDate = finish.getTime(); 
+		var startDate = endDate - 365*24*60*60*1000;
+		begin.setTime(startDate);
+	
 	    $('#slider-range' ).slider({
 	      range: true,
-	      min: 0101,
-	      max: 3112,
-	      values: [ 0101, 3112 ],
+	      min: Math.round(startDate/(24*60*60*1000)),
+	      max: Math.round(endDate/(24*60*60*1000)),
+	      values: [ Math.round(startDate/(24*60*60*1000)), Math.round(endDate/(24*60*60*1000)) ],
 	      slide: function( event, ui ) {
-	        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+	    	  begin.setTime(ui.values[ 0 ]*24*60*60*1000);
+	    	  finish.setTime(ui.values[ 1 ]*24*60*60*1000);
+
+	        $( "#amount" ).val( "From: " + begin.toString() + " to: " + finish.toString() );
 	      }
 	    });
-	    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-	      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+	    //$( "#amount" ).val( "From: " + $( "#slider-range" ).slider( "values", 0 ) +
+	  	//      " to: " + $( "#slider-range" ).slider( "values", 1 ) );
+	    $( "#amount" ).val( "From: " + begin.toString() + " to: " + finish.toString() );
 	  });
 </script>
 
@@ -113,35 +146,30 @@
             <li><a href="Search.jsp">Search</a></li>
             <li><a href="Trending.jsp">Trending</a></li>
             <li><a href="Social.jsp">Social</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="./">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+    		<%if(currentUser != null) { %>  
+            <li><a>Hello <%= ServletUtils.getProtectedUserNickname(currentUser.getNickname()) %> , 
+                  <%= currentUser.getEmail() %></a></li>
+            <li class="active">
+                  <a href=<%= userService.createLogoutURL(configManager.getLoginPageUrl())%>>Sign out</a>
+   			<% } else {%>
+            <li class="active">
+                  <a href=<%= userService.createLoginURL(configManager.getMainPageUrl())%>>Sign in</a>   
+   			<% } %>  
+    		</li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
-    </div> <!-- /container -->
 
-	<p>
-		<label for="amount">Time range:</label>
-		<input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
-	</p>
-	<div id="slider-range" style="width:600px;"></div>
-	<p></p>
-	<div id="map_canvas" style="width:600px;height:400px"></div>		
+		<p>
+			<label for="amount">Time range:</label>
+			<input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold; width:1000px;" />
+		</p>
+		<div id="slider-range" style="width:1100px;"></div>
+		<p></p>
+		<div id="map_canvas" style="width:1100px;height:500px"></div>		
+    </div> <!-- /container -->
 
 
 </body>

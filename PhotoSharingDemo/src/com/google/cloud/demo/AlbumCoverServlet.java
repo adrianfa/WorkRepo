@@ -49,7 +49,7 @@ public class AlbumCoverServlet extends HttpServlet {
 	    if (succeeded) {
 	    	String target = req.getParameter(ServletUtils.REQUEST_PARAM_NAME_TARGET_URL);
 	    	PhotoServiceManager serviceManager = appContext.getPhotoServiceManager();
-	    	res.sendRedirect(serviceManager.getRedirectUrl(target, user, id, albumId, "viewstream", null));
+	    	res.sendRedirect(serviceManager.getAlbumCovertUrl(target, user, id, albumId, "viewstream", null));
 	    } else {
 	      res.sendError(400, builder.toString());
 	    }
