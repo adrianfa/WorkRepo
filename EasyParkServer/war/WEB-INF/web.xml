@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<servlet>
+		<servlet-name>EasyParkServer</servlet-name>
+		<servlet-class>com.easypark.EasyParkServerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EasyParkServer</servlet-name>
+		<url-pattern>/easyparkserver</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>CreateOwnerAccount</servlet-name>
+		<servlet-class>com.easypark.CreateOwnerAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateOwnerAccount</servlet-name>
+		<url-pattern>/createowneraccount</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ManageOwnerAccount</servlet-name>
+		<servlet-class>com.easypark.ManageOwnerAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ManageOwnerAccount</servlet-name>
+		<url-pattern>/manageowneraccount</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EditLot</servlet-name>
+		<servlet-class>com.easypark.EditLotServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EditLot</servlet-name>
+		<url-pattern>/editlot</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	<servlet>
+    	<servlet-name>SystemServiceServlet</servlet-name>
+    	<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    	<init-param>
+      		<param-name>services</param-name>
+      		<param-value/>
+    	</init-param>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>SystemServiceServlet</servlet-name>
+    	<url-pattern>/_ah/spi/*</url-pattern>
+  	</servlet-mapping>
+  	
+  	<security-constraint>
+    	<web-resource-collection>
+ <!--      
+ 			<url-pattern>/*</url-pattern>
+-->
+ 			<url-pattern>/create</url-pattern>
+    		<url-pattern>/manage</url-pattern>
+    		<url-pattern>/post</url-pattern>
+    		<url-pattern>/cover</url-pattern>
+    		<url-pattern>/upload</url-pattern> 
+    	</web-resource-collection>
+    	<auth-constraint>
+      		<role-name>*</role-name>
+    	</auth-constraint>
+  	</security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/cron/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+  	
+	
+</web-app>
