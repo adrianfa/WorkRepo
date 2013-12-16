@@ -3,6 +3,8 @@ package com.easypark;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +31,20 @@ public class EditLotServlet extends HttpServlet {
 			if (!s.isAlreadyInList(s))
 				// persist to datastore
 				ofy().save().entity(s).now();
-			else
+			else {
 				duplicate = true;
+				List<ParkingLot> lots = OfyService.ofy().load().type(ParkingLot.class).list();
+				for (ParkingLot lot : lots) {
+					if(lot.compareTo(s) == 0) {
+						lot.price = price;
+						lot.spots = Integer.parseInt(spots);
+						lot.freeSpots = Integer.parseInt(spots);
+						ofy().save().entity(lot).now();
+						break;	
+					}
+				}
+
+			}
 	    }
 
 	    resp.sendRedirect(Utils.getLotEditUrl(duplicate, name, location, price, spots));		

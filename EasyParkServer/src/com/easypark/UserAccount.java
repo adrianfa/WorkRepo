@@ -5,6 +5,7 @@ import java.util.List;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.google.common.base.Joiner;
 
 @Entity
@@ -16,6 +17,8 @@ public class UserAccount implements Comparable<UserAccount> {
 	// id is set by the datastore for us
 	@Id
 	public Long userId;
+	@Index 
+	public String licensePlate;
 	public String userName;
 	public Long balance; //in cents
 	public String phoneNo;
@@ -29,12 +32,12 @@ public class UserAccount implements Comparable<UserAccount> {
 	@Override
 	public String toString() {
 		Joiner joiner = Joiner.on(":");
-		return joiner.join(userId.toString(), userName, balance.toString(), phoneNo);
+		return joiner.join(licensePlate.toString(), userName, balance.toString(), phoneNo);
  	}
 
 
-	public UserAccount(Long userId, String ownerName, Long balance) {
-		this.userId = userId;
+	public UserAccount(String licensePlate, String userName, String phoneNo, Long balance) {
+		this.licensePlate = licensePlate;
 		this.userName = userName;
 		this.balance = balance;
 		this.phoneNo = phoneNo;
@@ -42,7 +45,7 @@ public class UserAccount implements Comparable<UserAccount> {
 
 	@Override
 	public int compareTo(UserAccount other) {
-		return userName.compareTo(other.userName);
+		return licensePlate.compareTo(other.licensePlate);
 	}
 	
 	public boolean isAlreadyInList(UserAccount other) {

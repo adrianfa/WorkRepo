@@ -64,7 +64,7 @@
 
 	<% int error_in_page=0;
 	String same_name = request.getParameter("duplicate");
-	if (same_name != null) error_in_page = Integer.valueOf(same_name);
+	//if (same_name != null) error_in_page = Integer.valueOf(same_name);
 	
 	if (error_in_page==0) { %>
       <div class="view-title">

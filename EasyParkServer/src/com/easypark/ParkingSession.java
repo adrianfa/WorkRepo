@@ -26,6 +26,7 @@ public class ParkingSession implements Comparable<ParkingSession> {
 	public Date alertTime;
 	public Long paidAmmount;
 	public String paymentMethod;
+	public String lotAddress;
   
 	// TODO: figure out why this is needed
 	@SuppressWarnings("unused")
@@ -37,7 +38,7 @@ public class ParkingSession implements Comparable<ParkingSession> {
 		Joiner joiner = Joiner.on(":").useForNull("NULL");
 		return joiner.join(sessionId.toString(), userId.toString(), lotId.toString(), transactionId.toString(), 
 				Boolean.toString(alertSent), startTime.toString(),
-				expirationTime.toString(), alertTime.toString(), paidAmmount.toString(), paymentMethod);
+				expirationTime.toString(), alertTime.toString(), paidAmmount.toString(), paymentMethod, lotAddress);
  	}
 
 
@@ -47,9 +48,40 @@ public class ParkingSession implements Comparable<ParkingSession> {
 		this.lotId = lotId;
 		this.alertSent = alertSent;
 		this.startTime = new Date();
+		this.expirationTime = new Date();
+		this.alertTime = new Date();
 		this.expirationTime.setTime(startTime.getTime() + stayTime);
 		this.alertTime.setTime(startTime.getTime() + stayTime - alertAhead);	
 		this.paidAmmount = 0L;
+	}
+	
+	public ParkingSession(String lotAddress, long stayExpTime, String paymentMethod, Long userId) {
+		this.lotAddress = lotAddress;
+		this.userId = userId;
+		this.startTime = new Date();
+		this.expirationTime = new Date();
+		this.alertTime = new Date();
+		this.expirationTime.setTime(stayExpTime);
+		this.paymentMethod = paymentMethod;
+		this.paidAmmount = 0L;
+		this.alertSent = false;
+		this.alertTime.setTime(stayExpTime - 15*60*1000); //15min default alert ahead of expiration time	
+	}
+
+	public ParkingSession(Long sessionId, Long userId, Long lotId, int availableSpots, String lotAddress, long stayExpTime, String paymentMethod, long cost) {
+		this.sessionId = sessionId;
+		this.userId = userId;
+		this.lotId = lotId;
+		this.transactionId = Long.valueOf(String.valueOf(availableSpots));
+		this.lotAddress = lotAddress;
+		this.startTime = new Date();
+		this.expirationTime = new Date();
+		this.alertTime = new Date();
+		this.expirationTime.setTime(stayExpTime);
+		this.paymentMethod = paymentMethod;
+		this.paidAmmount = cost;
+		this.alertSent = false;
+		this.alertTime.setTime(stayExpTime - 15*60*1000); //15min default alert ahead of expiration time	
 	}
 
 	@Override

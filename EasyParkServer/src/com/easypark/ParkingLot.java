@@ -21,6 +21,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
 	public String location;
 	public String price;
 	public int spots;
+	public int freeSpots;
   
 	// TODO: figure out why this is needed
 	@SuppressWarnings("unused")
@@ -30,7 +31,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
 	@Override
 	public String toString() {
 		Joiner joiner = Joiner.on(":");
-		return joiner.join(lotId.toString(), lotName, ownerId, location, price, String.valueOf(spots));
+		return joiner.join(lotId.toString(), lotName, ownerId, location, price, String.valueOf(spots), String.valueOf(freeSpots));
  	}
 
 
@@ -40,6 +41,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
 		this.location = location;
 		this.price = price;
 		this.spots = spots;
+		this.freeSpots = spots;
 	}
 
 	@Override
