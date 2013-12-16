@@ -1,27 +1,83 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
-
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Park and Pay</title>
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="css/ie7.css" type="text/css" />
+		<![endif]-->
+	</head>
+	<body>
+		<div class="page">
+			<div class="header">
+				<a href="index.html" id="logo"><img src="images/logo.gif" alt=""/></a>
+				<ul>
+					<li class="selected"><a href="index.html">Home</a></li>
+					<li><a href="Login.jsp">Login</a></li>
+					<li><a href="services.html">Services</a></li>
+					<li><a href="about.html">About</a></li>
+					<li><a href="blog.html">Blog</a></li>
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="easyparkserver">EasyParkServer</a></td>
-      </tr>
-    </table>
-  </body>
-</html>
+				</ul>
+			</div>
+			<div class="body">
+				<div id="featured">
+					<h3>Connecting private parking owners with drivers</h3>
+					<p>Do you own a few well located parking spots that are now not worth 
+					opening to public? 
+					Are you annoyed by events around you ? 
+					Is your office parking full after-hours and you have to fight the intruders ? 
+					Why not use it as an opportunity to make some money ? 
+					This site allows you to enroll your parking areas and pass the parking 
+					conditions you request to drivers. Drivers will see your conditions, and 
+					if they agree to them, they will pay for their parking. 
+					 </p>
+					<input type="button" value="Read more" onClick="parent.location='services.html'"/>
+				</div>
+				<ul class="blog">
+					<li>
+						<div>
+							<a href="service_driver.html"><img src="images/driver.png" alt=""/></a>
+							<p align=center> <b> <font color="#3090C7" size="3"> MOBILE APPLICATION INFO </font> </b></p>
+							<p> Click to get the Mobile application. </p>
+							<a href="service_driver.html">click to read more</a>
+						</div>
+					</li>
+					<li>
+						<div>
+							<a href="Login.jsp"><img src="images/owner.jpg" alt=""/></a>
+							<p align=center> <b> <font color="#0000A0" size="3"> OWNER LOGIN </font> </b></p>
+							<p> Owner ? Click picture to login. </p>
+							<a href="service_owner.html">click to read more</a>
+						</div>
+					</li>
+					<li>
+						<div>
+							<a href="service_enforcer.html"><img src="images/enforcer.jpg" alt=""/></a>
+							<p align=center> <b> <font color="#2554C7" size="3"> PARKING SHERIFF LOGIN </font> </b></p>
+							<p> Parking sheriff - click picture to login. </p>
+							<a href="service_enforcer.html">click to read more</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="footer">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="Login.jsp">Login</a></li>
+					<li><a href="about.html">About</a></li>
+					<li><a href="blog.html">Blog</a></li>
+					<li><a href="services.html">Gallery</a></li>
+				</ul>
+				<p>&#169; Copyright &#169; 2013. Farkash</p>
+				<div class="connect">
+					<a href="http://facebook.com/freewebsitetemplates" id="facebook">facebook</a>
+					<a href="http://twitter.com/fwtemplates" id="twitter">twitter</a>
+					<a href="http://www.youtube.com/fwtemplates" id="vimeo">vimeo</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>  

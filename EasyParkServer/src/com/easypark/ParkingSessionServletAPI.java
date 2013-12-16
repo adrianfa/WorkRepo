@@ -31,8 +31,7 @@ public class ParkingSessionServletAPI extends HttpServlet {
 		long price = 0;
 
 		List<ParkingLot> lots = OfyService.ofy().load().type(ParkingLot.class).list();
-		int count = 0;
-        
+       
 		for (ParkingLot lot : lots) {
 			if(lot.location.compareToIgnoreCase(parkingLot) == 0) {
 				availableSpots = lot.freeSpots;

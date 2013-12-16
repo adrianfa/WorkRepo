@@ -24,10 +24,18 @@ public class EditLotServlet extends HttpServlet {
 		User currentUser = userService.getCurrentUser();
 	    String name = req.getParameter("name");
 	    String location = req.getParameter("location");
+	    String location_latitude = req.getParameter("location_latitude");
+	    String location_longitude = req.getParameter("location_longitude");
 	    String price = req.getParameter("price");
 	    String spots = req.getParameter("spots");
+	    String opening = req.getParameter("opening_h");
+	    String closing = req.getParameter("closing_h"); 
+	    
 	    if((currentUser != null) && (location != null)) {
-	    	ParkingLot s = new ParkingLot(name, currentUser.getUserId(), location, price, Integer.parseInt(spots));
+	    	ParkingLot s = new ParkingLot(	name, currentUser.getUserId(), location, 
+	    									location_latitude, location_longitude,
+	    									price, Integer.parseInt(spots), 
+	    									opening,closing);
 			if (!s.isAlreadyInList(s))
 				// persist to datastore
 				ofy().save().entity(s).now();
@@ -46,8 +54,11 @@ public class EditLotServlet extends HttpServlet {
 
 			}
 	    }
+	    // return to Manage
+	    resp.sendRedirect("/Manage.jsp");
 
-	    resp.sendRedirect(Utils.getLotEditUrl(duplicate, name, location, price, spots));		
+	    // remain on this page ??? 
+	    // resp.sendRedirect(Utils.getLotEditUrl(duplicate, name, location, price, spots));		
 	}
 
 }

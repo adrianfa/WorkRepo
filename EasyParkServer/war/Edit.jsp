@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List"%>
 <%@ page import="com.easypark.*"%>
 <%@ page import="com.google.appengine.api.users.*"%>
 <%@ page import="com.google.appengine.api.datastore.DatastoreNeedIndexException"%>
@@ -9,66 +10,45 @@
  	UserService userService = UserServiceFactory.getUserService();
 	User currentUser = userService.getCurrentUser();
 %>
-    
+     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>EasyPark</title>
-<!-- Bootstrap core CSS -->
-<link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
-<link href="navbar.css" rel="stylesheet">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Park and Pay</title>
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="css/ie7.css" type="text/css" />
+		<![endif]-->
 </head>
 <body>
-    <div class="container">
+		<div class="page">
+			<div class="header">
+				<a href="index.html" id="logo"><img src="images/logo.gif" alt=""/></a>
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="Manage.jsp">Manage</a></li>
+					    <%if(currentUser != null) { %>  
+            		<li><a>Hello <%= currentUser.getNickname() %> , 
+                  		<%= currentUser.getEmail() %></a></li>
+            		<li class="active">
+                  		<a href=<%= userService.createLogoutURL("/Create.jsp")%>>Sign out</a>
+   						<% } else {%>
+            		<li class="active">
+                  		<a href=<%= userService.createLoginURL("/Create.jsp")%>>Sign in</a>   
+   						<% } %>     						
+				</ul>
+			</div>
+			<div class="body">
+				<div id="featured_oe">
 
-      <!-- Static navbar -->
-      <div class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><img src="img/photofeed.png" alt="Connexus" /></a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="Manage.jsp">Manage</a></li>
-            <li><a href="Create.jsp">Create</a></li>
-            <li class="active"><a href="Edit.jsp">Add/Edit</a></li>
-            <li><a href="Search.jsp">Search</a></li>
-            <li><a href="Trending.jsp">Trending</a></li>
-            <li><a href="Social.jsp">Social</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-    		<%if(currentUser != null) { %>  
-            <li><a>Hello <%= currentUser.getNickname() %> , 
-                  <%= currentUser.getEmail() %></a></li>
-            <li class="active">
-                  <a href=<%= userService.createLogoutURL("/Edit.jsp")%>>Sign out</a>
-   			<% } else {%>
-            <li class="active">
-                  <a href=<%= userService.createLoginURL("/Edit.jsp")%>>Sign in</a>   
-   			<% } %>  
-    		</li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-
-	<% int error_in_page=0;
-	String same_name = request.getParameter("duplicate");
-	//if (same_name != null) error_in_page = Integer.valueOf(same_name);
+			<% int error_in_page=0;
+			String same_name = request.getParameter("duplicate");
+			if (same_name != null) error_in_page = Integer.valueOf(same_name);
 	
-	if (error_in_page==0) { %>
-      <div class="view-title">
-        <p>ADD/EDIT LOT</p>
+			if (error_in_page==0) { %>
+    	 <div class="view-title">
+        <h3>ADD & EDIT LOT</h3>
         <% if (currentUser != null) { 
     	    String name = request.getParameter("name");
     	    if (name == null)
@@ -76,41 +56,111 @@
     	    String location = request.getParameter("location");
     	    if (location == null)
     	    	location = "location address here...";
+       	    String location_latitude = request.getParameter("location_latitude");
+    	    if (location_latitude == null)
+    	    	location_latitude = "latitude ...";
+       	    String location_longitude = request.getParameter("location_longitude");
+    	    if (location_longitude == null)
+    	    	location_longitude = "longitude ...";
     	    String price = request.getParameter("price");
     	    if (price == null)
     	    	price = "hourly price here...";
     	    String spots = request.getParameter("spots");
     	    if (spots == null)
     	    	spots = "number of spots here...";
+    	    String opening_h = request.getParameter("opening_h");
+    	    if (opening_h == null)
+    	    	opening_h = "opening hour ...";
+       	    String closing_h = request.getParameter("closing_h");
+    	    if (closing_h == null)
+    	    	closing_h = "closing hour ...";
+
 		 %>
-        <form action="/editlot"
-              method="post">     
-	        <input id="lot" class="input text" name="name" type="text" value="<%= name%>">
-	        <p>Edit lot name</p>
+        <form action="/editlot" method="post">     
+	        <p>Lot name.</p>
+	       	<input id="lot" class="input text" name="name" type="text" value="<%= name%>">
+	        <p>Location.</p>
 	        <input id="lot" class="input text" name="location" type="text" value="<%= location%>">
-	        <p>Edit location address</p>
+	         <p> </p>
+	        <input id="lot" class="input text" name="location_latitude" type="text" value="<%= location_latitude%>">
+	        <input id="lot" class="input text" name="location_longitude" type="text" value="<%= location_longitude%>">
+	        <p>Hourly price for parking on a spot on this lot.</p>
 	        <input id="lot" class="input text" name="price" type="text" value="<%= price%>">
-	        <p>Edit hourly price for parking on a spot on this lot</p>
+	        <p>Number of parking spots on this lot.</p>
 	        <input id="lot" class="input text" name="spots" type="text" value="<%= spots%>">
-	        <p>Edit number of parking spots on this lot</p>
-	        <input id="btn-post" class="active btn" type="submit" value="Submit Changes">
+	        <p>Opening and closing time.</p>
+	        <input id="lot" class="input text" name="opening_h" type="text" value="<%= opening_h%>">
+	        <input id="lot" class="input text" name="closing_h" type="text" value="<%= closing_h%>">
+	        
+	        <p>Please click <font color="#EE9A4D">Submit Changes</font> below when done.</p>
+	        <input id="btn-post" class="active btn" type="submit" value="Submit Changes" >
 	    </form>
+	    
 	    <% } else { %>
 	     <p>Please login in order to add/edit parking lot data...</p>	    
 	    <% } %>
      </div>
      <% } else { %>
      <div class="view-title">
-      
-     <img class="errormsg" 
-          src="img/CreateError.png"
-          alt="Error Image" />
-     
+     	<img class="errormsg" src="img/CreateError.png" alt="Error Image" />
      </div>
      <%} %>
-
-    </div> <!-- /container -->
-
+				<input type="button" value="Return to your List" onClick="parent.location='Manage.jsp'"
+				style="background:url(../images/interface_o.jpg) no-repeat; color:#fff;" 
+				/>
+    	</div>    
+    	
+   
+				<ul class="blog">
+					<li>
+						<div>
+							<a href="service_driver.html"><img src="images/driver.png" alt=""/></a>
+							<p align=center> <b> <font color="#3090C7" size="3"> MOBILE APPLICATION INFO </font> </b></p>
+							<p> Click to get the Mobile application. </p>
+							<a href="service_driver.html">click to read more</a>
+						</div>
+					</li>
+					<li>
+						<div>
+							<a href="Login.jsp"><img src="images/owner.jpg" alt=""/></a>
+							<p align=center> <b> <font color="#0000A0" size="3"> OWNER LOGIN </font> </b></p>
+							<p> Owner ? Click picture to login. </p>
+							<a href="service_owner.html">click to read more</a>
+						</div>
+					</li>
+					<li>
+						<div>
+							<a href="Login.jsp"><img src="images/enforcer.jpg" alt=""/></a>
+							<p align=center> <b> <font color="#2554C7" size="3"> PARKING SHERIFF LOGIN </font> </b></p>
+							<p> Parking sheriff - click picture to login. </p>
+							<a href="service_enforcer.html">click to read more</a>
+						</div>
+					</li>
+				</ul>
+				
+			</div> 
+			<div class="footer">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+    		<%if(currentUser != null) { %>  
+            <li><a>Hello <%= currentUser.getNickname() %> , 
+                  <%= currentUser.getEmail() %></a></li>
+            <li class="active">
+                  <a href=<%= userService.createLogoutURL("/Create.jsp")%>>Sign out</a>
+   			<% } else {%>
+            <li class="active">
+                  <a href=<%= userService.createLoginURL("/Create.jsp")%>>Sign in</a>   
+   			<% } %>  
+  					<li><a href="services.html">Gallery</a></li>
+				</ul>
+				<p>&#169; Copyright &#169; 2013. Farkash</p>
+				<div class="connect">
+					<a href="http://facebook.com/freewebsitetemplates" id="facebook">facebook</a>
+					<a href="http://twitter.com/fwtemplates" id="twitter">twitter</a>
+					<a href="http://www.youtube.com/fwtemplates" id="vimeo">vimeo</a>
+				</div>
+			</div>
+		</div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

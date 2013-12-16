@@ -19,9 +19,16 @@ public class ParkingLot implements Comparable<ParkingLot> {
 	public String lotName;
 	public String ownerId;
 	public String location;
+	public String location_latitude;
+	public String location_longitude;
 	public String price;
 	public int spots;
 	public int freeSpots;
+	public String opening_h;
+	public String closing_h;
+	public long earnings;
+	public int occupancy;
+	public boolean active; 
   
 	// TODO: figure out why this is needed
 	@SuppressWarnings("unused")
@@ -35,12 +42,19 @@ public class ParkingLot implements Comparable<ParkingLot> {
  	}
 
 
-	public ParkingLot(String lotName, String ownerId, String location, String price, int spots) {
+	public ParkingLot(String lotName, String ownerId, String location, String loc_lat, String loc_long, String price, int spots, String opening, String closing) {
 		this.lotName = lotName;
 		this.ownerId = ownerId;
 		this.location = location;
+		this.location_latitude = loc_lat; // 30.26758;
+		this.location_longitude = loc_long; //-97.74297;
 		this.price = price;
 		this.spots = spots;
+		this.opening_h = opening;
+		this.closing_h = closing;
+		this.earnings = 0;
+		this.occupancy=0;
+		this.active=true;
 		this.freeSpots = spots;
 	}
 

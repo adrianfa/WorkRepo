@@ -13,56 +13,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>EasyPark</title>
-<!-- Bootstrap core CSS -->
-<link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Park and Pay</title>
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="css/ie7.css" type="text/css" />
+		<![endif]-->
 
-<!-- Custom styles for this template -->
-<link href="navbar.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+ 		<div class="page">
+			<div class="header">
+				<a href="index.html" id="logo"><img src="images/logo.gif" alt=""/></a>
+				<ul>
+					<li class="selected"><a href="index.html">Home</a></li>
+					<li><a href="Login.jsp">Login</a></li>
+					<li><a href="services.html">Services</a></li>
+					<li><a href="about.html">About</a></li>
+					<li><a href="blog.html">Blog</a></li>
 
-      <!-- Static navbar -->
-      <div class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><img src="img/photofeed.png" alt="Connexus" /></a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="Manage.jsp">Manage</a></li>
-            <li class="active"><a href="Create.jsp">Create</a></li>
-            <li><a href="Edit.jsp">Add/Edit</a></li>
-            <li><a href="Search.jsp">Search</a></li>
-            <li><a href="Trending.jsp">Trending</a></li>
-            <li><a href="Social.jsp">Social</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-    		<%if(currentUser != null) { %>  
-            <li><a>Hello <%= currentUser.getNickname() %> , 
-                  <%= currentUser.getEmail() %></a></li>
-            <li class="active">
-                  <a href=<%= userService.createLogoutURL("/Create.jsp")%>>Sign out</a>
-   			<% } else {%>
-            <li class="active">
-                  <a href=<%= userService.createLoginURL("/Create.jsp")%>>Sign in</a>   
-   			<% } %>  
-    		</li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+				</ul>
+			</div>  
 
-	<% int error_in_page=0;
+ 	<% int error_in_page=0;
 	String same_name = request.getParameter("duplicate_account");
 	if (same_name != null) error_in_page = Integer.valueOf(same_name);
 	

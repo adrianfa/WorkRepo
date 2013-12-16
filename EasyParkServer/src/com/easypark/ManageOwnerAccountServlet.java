@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -29,18 +30,50 @@ public class ManageOwnerAccountServlet extends HttpServlet {
 			else
 				duplicate = true;
 	    }
+	   
+	    String[] values = req.getParameterValues( "delete-box" );
+	    //String lot_to_edit = req.getParameter( "edit-box" );
 
-	    StringBuilder builder = new StringBuilder("/Edit.jsp");
-	    if (duplicate) {
-	        builder.append("?")
-	            .append("duplicate_account")
-	            .append("=")
-	            .append("1");
-	      }
+	    if (values!=null) {
+			List<ParkingLot> lots = OfyService.ofy().load().type(ParkingLot.class).list();
+			
+			for (ParkingLot lot : lots) {
+                for(int i=0; i<values.length; i++) {
+                    String val = values[i];
+                    if (lot.lotId == Long.valueOf(val)) 
+                    {
+                    	lot.active=false; 
+                    	ofy().save().entity(lot).now();
+                    	break;
+                    }  
+			}	}    	
+	    	
+	    	StringBuilder builder = new StringBuilder("/Manage.jsp"); 
+		    resp.sendRedirect(builder.toString());
+		    
+	    }
+	    /* else if  (lot_to_edit!=null) { 
+	    	StringBuilder builder = new StringBuilder("/Edit.jsp");
+	    	if (duplicate) {
+	    		builder.append("?")
+	    			.append("duplicate_account")
+	    			.append("=")
+	    			.append("1");
+	    		}
+	    	resp.sendRedirect(builder.toString());
+	    	}
+	    	*/
 	    
-	    resp.sendRedirect(builder.toString());
-
-		
+	    else {
+    	StringBuilder builder = new StringBuilder("/Edit.jsp");
+    	if (duplicate) {
+    		builder.append("?")
+    			.append("duplicate_account")
+    			.append("=")
+    			.append("1");
+    		}
+    	resp.sendRedirect(builder.toString());
+	    }
 	}
 
 }
